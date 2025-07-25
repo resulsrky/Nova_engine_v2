@@ -1,0 +1,12 @@
+# ninja log v6
+1	542	1753432339739832158	CMakeFiles/novaengine.dir/src/image.cpp.o	617e5d909703ceb
+1011	1234	1753443345486295163	/home/ryuzaki/Desktop/NoveEngine/bin/novaengine	f9d6974eec60cdd0
+1	1029	1753443199433544659	CMakeFiles/novaengine.dir/src/ffmpeg_encoder.cpp.o	3c1c2acb72f82a6d
+1	1011	1753443344476256695	CMakeFiles/novaengine.dir/src/main.cpp.o	f4a93b767ae8e567
+2	1113	1753444837021398277	CMakeFiles/novaengine.dir/src/main.cpp.o	f4a93b767ae8e567
+2	1071	1753444841775412748	CMakeFiles/novaengine.dir/src/main.cpp.o	f4a93b767ae8e567
+2	143	1753444907821613826	CMakeFiles/novaengine.dir/src/slicer.cpp.o	47575fbba8a24e04
+2	1097	1753444907821613826	CMakeFiles/novaengine.dir/src/main.cpp.o	f4a93b767ae8e567
+1097	1328	1753444908916617160	/home/ryuzaki/Desktop/NoveEngine/bin/novaengine	32a07ad4b7e1a570
+2	1087	1753445314642850158	CMakeFiles/novaengine.dir/src/main.cpp.o	f4a93b767ae8e567
+1087	1337	1753445315727853430	/home/ryuzaki/Desktop/NoveEngine/bin/novaengine	32a07ad4b7e1a570
