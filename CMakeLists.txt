@@ -16,7 +16,9 @@ add_executable(novaengine ${SOURCES}
         include/ffmpeg_encoder.h
         src/ffmpeg_encoder.cpp
         include/slicer.hpp
-        src/slicer.cpp)
+        src/slicer.cpp
+        include/udp_sender.hpp
+        src/udp_sender.cpp)
 
 # ✅ OpenCV
 find_package(OpenCV REQUIRED)

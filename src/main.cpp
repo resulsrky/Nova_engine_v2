@@ -5,89 +5,55 @@
 #include <chrono>
 #include "ffmpeg_encoder.h"
 #include "slicer.hpp"
+#include "udp_sender.hpp"
 
 using namespace cv;
 using namespace std;
-void process_encoded_frame(const uint8_t* encoded_data, size_t encoded_size) {
-    static uint16_t frame_id = 0;
 
-    auto chunks = slice_frame(encoded_data, encoded_size, frame_id++);
-    for (const auto& chunk : chunks) {
-        // Burada UDP ile göndereceğiz (2. adıma geçince)
-        printf("Chunk size: %zu\n", chunk.data.size());
+int main(int argc, char* argv[]) {
+    if (argc < 3) {
+        cerr << "Usafe: ./novaengine <TargetIP> <Port1> [Port2] [Port3] ...\n";
+        return 1;
     }
-}
-int main()
-{
-    Mat frame;
-    VideoCapture cap;
-    int width = 1280;
-    int height = 720;
-    int fps = 30;
-    int bitrate = 400000; // 400 kbps
 
-    int deviceID = 0;
-    int apiID = cv::CAP_ANY;
+    string target_ip = argv[1];
+    vector<int> target_ports;
+    for (int i = 2; i < argc; ++i)
+        target_ports.push_back(stoi(argv[i]));
+
+    if (!init_udp_sockets(target_ports.size())) {
+        cerr << "[ERROR] Socket re-Binding.\n";
+        return 1;
+    }
+
+    int width = 1280, height = 720, fps = 30, bitrate = 400000;
+    VideoCapture cap(0, cv::CAP_ANY);
     cap.set(CAP_PROP_FRAME_WIDTH, width);
     cap.set(CAP_PROP_FRAME_HEIGHT, height);
-    cap.open(deviceID, apiID);
     cap.set(CAP_PROP_FPS, fps);
-
     if (!cap.isOpened()) {
-        cerr << "Unable to open camera device" << endl;
+        cerr << "Camera could not started.\n";
         return -1;
     }
 
     FFmpegEncoder encoder(width, height, fps, bitrate);
+    uint16_t frame_id = 0;
+    Mat frame;
 
-    int frame_count = 0;
-    auto start = chrono::steady_clock::now();
-    auto warmup_start = chrono::steady_clock::now();
-    bool warmupDone = false;
-
-    cout << "Warming up the camera for 3 seconds..." << endl;
-
+    cout << "Stream is starting...\n";
     while (true) {
         cap.read(frame);
-        if (frame.empty()) {
-            cerr << "Empty frame" << endl;
-            continue;
-        }
+        if (frame.empty()) continue;
 
-        auto now = chrono::steady_clock::now();
-        double warmupElapsed = chrono::duration<double>(now - warmup_start).count();
-
-        if (!warmupDone) {
-            imshow("Warming up...", frame);
-            if (warmupElapsed >= 0.1) {
-                destroyWindow("Warming up...");
-                warmupDone = true;
-                cout << "Warmup complete. Starting encoding..." << endl;
-                start = chrono::steady_clock::now();
-            }
-            waitKey(1);
-            continue;
-        }
-
-        std::vector<uint8_t> encoded;
+        vector<uint8_t> encoded;
         if (encoder.encodeFrame(frame, encoded)) {
-            cout << "Encoded frame size: " << encoded.size() << " bytes" << endl;
-            // TODO: Send via UDP
+            auto chunks = slice_frame(encoded.data(), encoded.size(), frame_id++);
+            send_chunks_to_ports(chunks, target_ip, target_ports);
         }
 
-        imshow("Live", frame);
-        if (waitKey(1) >= 0)
-            break;
-
-        frame_count++;
-        if (frame_count == 60) {
-            auto end = chrono::steady_clock::now();
-            double elapsed_sec = chrono::duration<double>(end - start).count();
-            cout << "Measured FPS: " << frame_count / elapsed_sec << endl;
-            frame_count = 0;
-            start = chrono::steady_clock::now();
-        }
+        if (waitKey(1) >= 0) break;
     }
 
+    close_udp_sockets();
     return 0;
 }
