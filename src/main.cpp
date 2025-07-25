@@ -3,6 +3,11 @@
 #include <opencv2/highgui.hpp>
 #include <iostream>
 #include <chrono>
+#include <vector>
+#include <thread>
+#include <string>
+
+
 #include "ffmpeg_encoder.h"
 #include "slicer.hpp"
 #include "udp_sender.hpp"

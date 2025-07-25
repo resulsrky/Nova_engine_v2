@@ -22,7 +22,10 @@ add_executable(novaengine ${SOURCES}
         include/packet_parser.hpp
         include/smart_collector.hpp
         src/receiver.cpp
-        include/decode_and_display.hpp)
+        include/decode_and_display.hpp
+        include/receiver.hpp
+        src/sender_receiver.cpp
+        include/sender_receiver.hpp)
 
 # ✅ OpenCV
 find_package(OpenCV REQUIRED)
