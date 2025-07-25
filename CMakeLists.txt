@@ -18,7 +18,11 @@ add_executable(novaengine ${SOURCES}
         include/slicer.hpp
         src/slicer.cpp
         include/udp_sender.hpp
-        src/udp_sender.cpp)
+        src/udp_sender.cpp
+        include/packet_parser.hpp
+        include/smart_collector.hpp
+        src/receiver.cpp
+        include/decode_and_display.hpp)
 
 # ✅ OpenCV
 find_package(OpenCV REQUIRED)

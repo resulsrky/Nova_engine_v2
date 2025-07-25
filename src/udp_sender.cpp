@@ -13,13 +13,13 @@ bool init_udp_sockets(size_t count) {
     for (size_t i = 0; i < count; ++i) {
         int sock = socket(AF_INET, SOCK_DGRAM, 0);
         if (sock < 0) {
-            perror("❌ Soket oluşturulamadı");
+            perror("Socket creation failed");
             return false;
         }
         udp_sockets.push_back(sock);
     }
 
-    std::cout << "✅ " << count << " UDP soketi açıldı.\n";
+    std::cout << "+ " << count << " UDP Sockets Binded.\n";
     return true;
 }
 
@@ -28,7 +28,7 @@ void close_udp_sockets() {
         close(sock);
     }
     udp_sockets.clear();
-    std::cout << "🔒 Tüm UDP soketleri kapatıldı.\n";
+    std::cout << "All the sockets down.\n";
 }
 
 void send_chunks_to_ports(
@@ -56,9 +56,9 @@ void send_chunks_to_ports(
                               sizeof(addr));
 
         if (sent < 0) {
-            perror("❌ Chunk gönderimi hatalı");
+            perror("Chunk sending accour error");
         } else {
-            std::cout << "📤 Chunk gönderildi → Port " << port << " | Boyut: " << chunk.data.size() << "\n";
+            std::cout << "Chunk is send → Port " << port << " | size: " << chunk.data.size() << "\n";
         }
     }
 }

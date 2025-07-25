@@ -1,0 +1,3 @@
+/home/ryuzaki/Desktop/NoveEngine/build/CMakeFiles/novaengine.dir
+/home/ryuzaki/Desktop/NoveEngine/build/CMakeFiles/edit_cache.dir
+/home/ryuzaki/Desktop/NoveEngine/build/CMakeFiles/rebuild_cache.dir

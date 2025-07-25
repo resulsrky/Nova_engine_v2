@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
     }
 
     int width = 1280, height = 720, fps = 30, bitrate = 400000;
-    VideoCapture cap(0, cv::CAP_ANY);
+    VideoCapture cap(0, cv::CAP_V4L2);
     cap.set(CAP_PROP_FRAME_WIDTH, width);
     cap.set(CAP_PROP_FRAME_HEIGHT, height);
     cap.set(CAP_PROP_FPS, fps);
