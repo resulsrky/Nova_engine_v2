@@ -227,12 +227,6 @@ NovaEngine_SOURCE_DIR:STATIC=/home/ryuzaki/Desktop/NoveEngine
 //The directory containing a CMake configuration file for OpenCV.
 OpenCV_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/opencv4
 
-//Path to a file.
-PORTAUDIO_INCLUDE_DIR:PATH=/usr/include
-
-//Path to a library.
-PORTAUDIO_LIB:FILEPATH=/usr/lib/x86_64-linux-gnu/libportaudio.so
-
 //Path to a library.
 SWSCALE_LIB:FILEPATH=/usr/lib/x86_64-linux-gnu/libswscale.so
 

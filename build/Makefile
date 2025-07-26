@@ -129,6 +129,30 @@ novaengine/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/build
 .PHONY : novaengine/fast
 
+src/decode_and_display.o: src/decode_and_display.cpp.o
+.PHONY : src/decode_and_display.o
+
+# target to build an object file
+src/decode_and_display.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/decode_and_display.cpp.o
+.PHONY : src/decode_and_display.cpp.o
+
+src/decode_and_display.i: src/decode_and_display.cpp.i
+.PHONY : src/decode_and_display.i
+
+# target to preprocess a source file
+src/decode_and_display.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/decode_and_display.cpp.i
+.PHONY : src/decode_and_display.cpp.i
+
+src/decode_and_display.s: src/decode_and_display.cpp.s
+.PHONY : src/decode_and_display.s
+
+# target to generate assembly for a file
+src/decode_and_display.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/decode_and_display.cpp.s
+.PHONY : src/decode_and_display.cpp.s
+
 src/ffmpeg_encoder.o: src/ffmpeg_encoder.cpp.o
 .PHONY : src/ffmpeg_encoder.o
 
@@ -177,6 +201,30 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/sender_receiver.o: src/sender_receiver.cpp.o
+.PHONY : src/sender_receiver.o
+
+# target to build an object file
+src/sender_receiver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/sender_receiver.cpp.o
+.PHONY : src/sender_receiver.cpp.o
+
+src/sender_receiver.i: src/sender_receiver.cpp.i
+.PHONY : src/sender_receiver.i
+
+# target to preprocess a source file
+src/sender_receiver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/sender_receiver.cpp.i
+.PHONY : src/sender_receiver.cpp.i
+
+src/sender_receiver.s: src/sender_receiver.cpp.s
+.PHONY : src/sender_receiver.s
+
+# target to generate assembly for a file
+src/sender_receiver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/sender_receiver.cpp.s
+.PHONY : src/sender_receiver.cpp.s
+
 src/slicer.o: src/slicer.cpp.o
 .PHONY : src/slicer.o
 
@@ -200,6 +248,30 @@ src/slicer.s: src/slicer.cpp.s
 src/slicer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/slicer.cpp.s
 .PHONY : src/slicer.cpp.s
+
+src/smart_collector.o: src/smart_collector.cpp.o
+.PHONY : src/smart_collector.o
+
+# target to build an object file
+src/smart_collector.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/smart_collector.cpp.o
+.PHONY : src/smart_collector.cpp.o
+
+src/smart_collector.i: src/smart_collector.cpp.i
+.PHONY : src/smart_collector.i
+
+# target to preprocess a source file
+src/smart_collector.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/smart_collector.cpp.i
+.PHONY : src/smart_collector.cpp.i
+
+src/smart_collector.s: src/smart_collector.cpp.s
+.PHONY : src/smart_collector.s
+
+# target to generate assembly for a file
+src/smart_collector.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/smart_collector.cpp.s
+.PHONY : src/smart_collector.cpp.s
 
 src/udp_sender.o: src/udp_sender.cpp.o
 .PHONY : src/udp_sender.o
@@ -234,15 +306,24 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... novaengine"
+	@echo "... src/decode_and_display.o"
+	@echo "... src/decode_and_display.i"
+	@echo "... src/decode_and_display.s"
 	@echo "... src/ffmpeg_encoder.o"
 	@echo "... src/ffmpeg_encoder.i"
 	@echo "... src/ffmpeg_encoder.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/sender_receiver.o"
+	@echo "... src/sender_receiver.i"
+	@echo "... src/sender_receiver.s"
 	@echo "... src/slicer.o"
 	@echo "... src/slicer.i"
 	@echo "... src/slicer.s"
+	@echo "... src/smart_collector.o"
+	@echo "... src/smart_collector.i"
+	@echo "... src/smart_collector.s"
 	@echo "... src/udp_sender.o"
 	@echo "... src/udp_sender.i"
 	@echo "... src/udp_sender.s"
