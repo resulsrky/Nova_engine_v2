@@ -1,12 +1,13 @@
 #include "decode_and_display.hpp"
 #include <iostream>
+#include <opencv2/opencv.hpp>
 
 H264Decoder::H264Decoder() {
     init();
 }
 
 void H264Decoder::init() {
-    codec = avcodec_find_decoder(AV_CODEC_ID_H264);
+    codec = const_cast<AVCodec*>(avcodec_find_decoder(AV_CODEC_ID_H264));
     if (!codec) throw std::runtime_error("H264 decoder not found");
 
     codec_ctx = avcodec_alloc_context3(codec);

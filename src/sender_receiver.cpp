@@ -61,7 +61,18 @@ void run_sender(int argc, char* argv[]) {
 
         vector<uint8_t> encoded;
         if (encoder.encodeFrame(frame, encoded)) {
+            std::cout << " Original frame size: " << frame.total() * frame.elemSize() << " bytes\n";
+            std::cout << "Encoded frame size : " << encoded.size() << " bytes\n";
+
             auto chunks = slice_frame(encoded.data(), encoded.size(), frame_id++);
+
+            std::cout << "Chunk count: " << chunks.size() << "\n";
+            for (size_t i = 0; i < chunks.size(); ++i) {
+                size_t chunk_size = chunks[i].data.size() - HEADER_SIZE;
+                std::cout << "  └─ Chunk #" << i << ": " << chunk_size << " bytes\n";
+            }
+
+
             send_chunks_to_ports(chunks, target_ip, target_ports);
         }
 
@@ -70,7 +81,6 @@ void run_sender(int argc, char* argv[]) {
 
     close_udp_sockets();
 }
-
 void run_receiver() {
     constexpr int MAX_BUFFER = 1500;
     const std::vector<int> ports = {45094, 44824, 33061, 55008};
@@ -89,23 +99,19 @@ void run_receiver() {
         std::cout << "Listening UDP " << port << "\n";
     }
 
-    VideoCapture cap(0);
-    if (!cap.isOpened()) {
-        std::cerr << "Kamera açılmadı!\n";
-        return;
-    }
-
     H264Decoder decoder;
     Mat reconstructed_frame;
-    Mat camera_frame;
-    Mat display_frame;
+    bool has_received = false;
 
     SmartFrameCollector collector([&](const std::vector<uint8_t>& data) {
-        decoder.decode(data, reconstructed_frame);
+        if (decoder.decode(data, reconstructed_frame)) {
+            has_received = true;
+        }
     });
 
+    std::cout << "Receiver başlatıldı...\n";
+
     while (true) {
-        // Gelen UDP paketlerini işleme
         for (int sock : sockets) {
             uint8_t buf[MAX_BUFFER];
             ssize_t len = recv(sock, buf, sizeof(buf), 0);
@@ -115,19 +121,22 @@ void run_receiver() {
             }
         }
 
-        // Zaman aşımına uğramış frame'leri zorla göster
         collector.flush_expired_frames();
 
-        // Kameradan görüntü alma
-        cap.read(camera_frame);
-        if (!camera_frame.empty() && !reconstructed_frame.empty()) {
-            vconcat(reconstructed_frame, camera_frame, display_frame);
-            imshow("NovaEngine: Üstte UDP / Altta Kamera", display_frame);
+        Mat display_frame;
+        if (has_received && !reconstructed_frame.empty()) {
+            display_frame = reconstructed_frame.clone();
+        } else {
+            display_frame = Mat::zeros(720, 1280, CV_8UC3);
+            putText(display_frame, "Waiting for Client to Connect..", {200, 360}, FONT_HERSHEY_SIMPLEX, 1.5, Scalar(255,255,255), 3);
         }
 
-        if (waitKey(1) >= 0) break;
+        imshow("NovaEngine - Receiver", display_frame);
+
+        if (waitKey(1) == 27) break;
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
     for (int sock : sockets) close(sock);
+    destroyAllWindows();
 }

@@ -1,6 +1,7 @@
 #include "slicer.hpp"
 #include <cstring>
 #include <algorithm>
+#include <iostream>
 
 std::vector<Chunk> slice_frame(const uint8_t* frame_data, size_t frame_size, uint16_t frame_id) {
     std::vector<Chunk> chunks;
@@ -28,6 +29,10 @@ std::vector<Chunk> slice_frame(const uint8_t* frame_data, size_t frame_size, uin
         std::memcpy(chunk.data.data() + HEADER_SIZE, frame_data + offset, current_size);
 
         chunks.push_back(std::move(chunk));
+    }
+    size_t total_payload = total_chunks * payload_per_chunk;
+    if (frame_size < total_payload) {
+        std::cout << "[➕] Arta kalan veri: " << (total_payload - frame_size) << " byte\n";
     }
 
     return chunks;
