@@ -21,10 +21,13 @@
 
 using namespace std;
 using namespace cv;
+typedef chrono::steady_clock Clock;
+
+enum StatField { CAPTURE, ENCODE, SEND, DISPLAY, FIELD_COUNT };
 
 void run_sender(const string& target_ip, const vector<int>& target_ports) {
     if (target_ports.empty()) {
-        cerr << "Usage: sender <target_ip> <port1> <port2> ..." << endl;
+        cerr << "Usage: sender <target_ip> <port1> [port2 ...]" << endl;
         exit(1);
     }
 
@@ -33,14 +36,11 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
         exit(1);
     }
 
-    int width = 1280, height = 720;
-    int fps = 30;
-    int bitrate = 400000;
+    int width = 640, height = 480, fps = 30, bitrate = 400000;
     VideoCapture cap(0, cv::CAP_V4L2);
     cap.set(CAP_PROP_FRAME_WIDTH, width);
     cap.set(CAP_PROP_FRAME_HEIGHT, height);
     cap.set(CAP_PROP_FPS, fps);
-
     if (!cap.isOpened()) {
         cerr << "Camera could not be started." << endl;
         exit(1);
@@ -50,52 +50,64 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
     uint16_t frame_id = 0;
     Mat frame;
 
-    cout << "Stream started (Sender)..." << endl;
-
-    // FPS control
+    // Statistics
     chrono::milliseconds frame_duration(1000 / fps);
+    double stats[FIELD_COUNT] = {0};
     int frame_count = 0;
-    auto start_time = chrono::steady_clock::now();
+    auto stats_start = Clock::now();
 
     while (true) {
-        auto loop_start = chrono::steady_clock::now();
+        auto t0 = Clock::now();
 
+        // Capture
+        auto tc0 = Clock::now();
         cap.read(frame);
-        if (frame.empty()) continue;
+        auto tc1 = Clock::now();
+        stats[CAPTURE] += chrono::duration<double, milli>(tc1 - tc0).count();
 
-        // Measure encode time
-        auto t0 = chrono::steady_clock::now();
-        vector<uint8_t> encoded;
-        bool ok = encoder.encodeFrame(frame, encoded);
-        auto t1 = chrono::steady_clock::now();
-        auto encode_ms = chrono::duration_cast<chrono::milliseconds>(t1 - t0).count();
+        if (!frame.empty()) {
+            // Encode
+            auto te0 = Clock::now();
+            vector<uint8_t> encoded;
+            encoder.encodeFrame(frame, encoded);
+            auto te1 = Clock::now();
+            stats[ENCODE] += chrono::duration<double, milli>(te1 - te0).count();
 
-        if (ok) {
+            // Slice & Send
+            auto ts0 = Clock::now();
             auto chunks = slice_frame(encoded.data(), encoded.size(), frame_id++);
             send_chunks_to_ports(chunks, target_ip, target_ports);
+            auto ts1 = Clock::now();
+            stats[SEND] += chrono::duration<double, milli>(ts1 - ts0).count();
         }
 
+        // Display (self-view)
+        auto td0 = Clock::now();
         imshow("NovaEngine - Sender (You)", frame);
-
-        // FPS measurement and log every second
-        frame_count++;
-        auto now = chrono::steady_clock::now();
-        auto elapsed = chrono::duration_cast<chrono::seconds>(now - start_time).count();
-        if (elapsed >= 1) {
-            double actual_fps = frame_count / double(elapsed);
-            cout << "Actual FPS: " << actual_fps << " | Encode time: " << encode_ms << " ms" << endl;
-            frame_count = 0;
-            start_time = now;
-        }
-
-        // Throttle to target FPS
-        auto loop_end = chrono::steady_clock::now();
-        auto loop_time = chrono::duration_cast<chrono::milliseconds>(loop_end - loop_start);
-        if (loop_time < frame_duration) {
-            this_thread::sleep_for(frame_duration - loop_time);
-        }
-
         if (waitKey(1) >= 0) break;
+        auto td1 = Clock::now();
+        stats[DISPLAY] += chrono::duration<double, milli>(td1 - td0).count();
+
+        // Update stats per second
+        frame_count++;
+        auto now = Clock::now();
+        if (chrono::duration_cast<chrono::seconds>(now - stats_start).count() >= 1) {
+            cout << "Avg times (ms): Capture=" << stats[CAPTURE]/frame_count
+                 << ", Encode=" << stats[ENCODE]/frame_count
+                 << ", Send=" << stats[SEND]/frame_count
+                 << ", Display=" << stats[DISPLAY]/frame_count << endl;
+            // reset
+            memset(stats, 0, sizeof(stats));
+            frame_count = 0;
+            stats_start = now;
+        }
+
+        // Throttle
+        auto t1 = Clock::now();
+        auto loop_ms = chrono::duration_cast<chrono::milliseconds>(t1 - t0);
+        if (loop_ms < frame_duration) {
+            this_thread::sleep_for(frame_duration - loop_ms);
+        }
     }
 
     close_udp_sockets();
@@ -104,6 +116,9 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
 
 void run_receiver(const vector<int>& ports) {
     constexpr int MAX_BUFFER = 1500;
+
+    const int disp_width = 640;
+    const int disp_height = 480;
     vector<int> sockets;
     for (int port : ports) {
         int sock = socket(AF_INET, SOCK_DGRAM, 0);
@@ -111,7 +126,6 @@ void run_receiver(const vector<int>& ports) {
         addr.sin_family = AF_INET;
         addr.sin_port = htons(port);
         addr.sin_addr.s_addr = INADDR_ANY;
-
         bind(sock, (sockaddr*)&addr, sizeof(addr));
         fcntl(sock, F_SETFL, O_NONBLOCK);
         sockets.push_back(sock);
@@ -135,7 +149,7 @@ void run_receiver(const vector<int>& ports) {
             uint8_t buf[MAX_BUFFER];
             ssize_t len = recv(sock, buf, sizeof(buf), 0);
             if (len >= 4) {
-                ChunkPacket pkt = parse_packet(buf, len);
+                auto pkt = parse_packet(buf, len);
                 collector.handle(pkt);
             }
         }
@@ -144,14 +158,23 @@ void run_receiver(const vector<int>& ports) {
 
         Mat display_frame;
         if (has_received && !reconstructed_frame.empty()) {
+
+            Mat resized;
+            resize(reconstructed_frame, resized, Size(disp_width, disp_height));
+            display_frame = resized;
             display_frame = reconstructed_frame.clone();
         } else {
-            display_frame = Mat::zeros(720, 1280, CV_8UC3);
-            putText(display_frame, "Waiting for Client to Connect..", Point(200, 360), FONT_HERSHEY_SIMPLEX, 1.5, Scalar(255,255,255), 3);
+            display_frame = Mat::zeros(disp_height, disp_width, CV_8UC3);
+            putText(display_frame,
+                    "Waiting for Client to Connect..",
+                    Point(20, disp_height/2),
+                    FONT_HERSHEY_SIMPLEX,
+                    1.0,
+                    Scalar(255,255,255),
+                    2);
         }
 
         imshow("NovaEngine - Receiver", display_frame);
-
         if (waitKey(1) == 27) break;
         this_thread::sleep_for(chrono::milliseconds(1));
     }
