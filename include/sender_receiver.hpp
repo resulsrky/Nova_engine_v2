@@ -1,6 +1,10 @@
 #pragma once
 
-void run_sender(int argc, char* argv[]);
+#include <string>
+#include <vector>
 
-// Eğer dışarıdan port listesi verilmek istenirse bu overload çağrılır
-void run_receiver();
+
+void run_sender(const std::string& public_ip, const std::vector<int>& ports);
+
+
+void run_receiver(const std::vector<int>& ports);

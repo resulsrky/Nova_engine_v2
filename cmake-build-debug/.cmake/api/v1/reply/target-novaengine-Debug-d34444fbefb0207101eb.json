@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "/home/ryuzaki/Desktop/NoveEngine/bin/novaengine"
+			"path" : "/home/ryuzaki/Desktop/NovaEngine/bin/novaengine"
 		}
 	],
 	"backtrace" : 1,
@@ -74,7 +74,7 @@
 			[
 				{
 					"backtrace" : 5,
-					"path" : "/home/ryuzaki/Desktop/NoveEngine/include"
+					"path" : "/home/ryuzaki/Desktop/NovaEngine/include"
 				},
 				{
 					"backtrace" : 6,

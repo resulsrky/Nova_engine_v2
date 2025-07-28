@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "novaengine::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-novaengine-Debug-e724051e43158c732b18.json",
+					"jsonFile" : "target-novaengine-Debug-d34444fbefb0207101eb.json",
 					"name" : "novaengine",
 					"projectIndex" : 0
 				}
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/ryuzaki/Desktop/NoveEngine/cmake-build-debug",
-		"source" : "/home/ryuzaki/Desktop/NoveEngine"
+		"build" : "/home/ryuzaki/Desktop/NovaEngine/cmake-build-debug",
+		"source" : "/home/ryuzaki/Desktop/NovaEngine"
 	},
 	"version" : 
 	{

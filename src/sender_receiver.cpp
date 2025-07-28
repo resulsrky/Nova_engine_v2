@@ -10,7 +10,6 @@
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 
-#include <unistd.h>
 #include <fcntl.h>
 #include <iostream>
 #include <thread>
@@ -18,74 +17,94 @@
 #include <chrono>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
 
 using namespace std;
 using namespace cv;
 
-void run_sender(int argc, char* argv[]) {
-    if (argc < 3) {
-        cerr << "Usage: sender <target_ip> <port1> <port2> ...\n";
+void run_sender(const string& target_ip, const vector<int>& target_ports) {
+    if (target_ports.empty()) {
+        cerr << "Usage: sender <target_ip> <port1> <port2> ..." << endl;
         exit(1);
     }
-
-    string target_ip = argv[1];
-    vector<int> target_ports;
-    for (int i = 2; i < argc; ++i)
-        target_ports.push_back(stoi(argv[i]));
 
     if (!init_udp_sockets(target_ports.size())) {
-        cerr << "[ERROR] UDP soketleri başlatılamadı.\n";
+        cerr << "[ERROR] UDP sockets could not be initialized." << endl;
         exit(1);
     }
 
-    int width = 1280, height = 720, fps = 30, bitrate = 400000;
+    int width = 1280, height = 720;
+    int fps = 30;
+    int bitrate = 400000;
     VideoCapture cap(0, cv::CAP_V4L2);
     cap.set(CAP_PROP_FRAME_WIDTH, width);
     cap.set(CAP_PROP_FRAME_HEIGHT, height);
     cap.set(CAP_PROP_FPS, fps);
 
     if (!cap.isOpened()) {
-        cerr << "Camera could not started.\n";
-        exit(-1);
+        cerr << "Camera could not be started." << endl;
+        exit(1);
     }
 
     FFmpegEncoder encoder(width, height, fps, bitrate);
     uint16_t frame_id = 0;
     Mat frame;
 
-    cout << "Stream started (Sender)...\n";
+    cout << "Stream started (Sender)..." << endl;
+
+    // FPS control
+    chrono::milliseconds frame_duration(1000 / fps);
+    int frame_count = 0;
+    auto start_time = chrono::steady_clock::now();
 
     while (true) {
+        auto loop_start = chrono::steady_clock::now();
+
         cap.read(frame);
         if (frame.empty()) continue;
 
+        // Measure encode time
+        auto t0 = chrono::steady_clock::now();
         vector<uint8_t> encoded;
-        if (encoder.encodeFrame(frame, encoded)) {
-            std::cout << " Original frame size: " << frame.total() * frame.elemSize() << " bytes\n";
-            std::cout << "Encoded frame size : " << encoded.size() << " bytes\n";
+        bool ok = encoder.encodeFrame(frame, encoded);
+        auto t1 = chrono::steady_clock::now();
+        auto encode_ms = chrono::duration_cast<chrono::milliseconds>(t1 - t0).count();
 
+        if (ok) {
             auto chunks = slice_frame(encoded.data(), encoded.size(), frame_id++);
-
-            std::cout << "Chunk count: " << chunks.size() << "\n";
-            for (size_t i = 0; i < chunks.size(); ++i) {
-                size_t chunk_size = chunks[i].data.size() - HEADER_SIZE;
-                std::cout << "  └─ Chunk #" << i << ": " << chunk_size << " bytes\n";
-            }
-
-
             send_chunks_to_ports(chunks, target_ip, target_ports);
+        }
+
+        imshow("NovaEngine - Sender (You)", frame);
+
+        // FPS measurement and log every second
+        frame_count++;
+        auto now = chrono::steady_clock::now();
+        auto elapsed = chrono::duration_cast<chrono::seconds>(now - start_time).count();
+        if (elapsed >= 1) {
+            double actual_fps = frame_count / double(elapsed);
+            cout << "Actual FPS: " << actual_fps << " | Encode time: " << encode_ms << " ms" << endl;
+            frame_count = 0;
+            start_time = now;
+        }
+
+        // Throttle to target FPS
+        auto loop_end = chrono::steady_clock::now();
+        auto loop_time = chrono::duration_cast<chrono::milliseconds>(loop_end - loop_start);
+        if (loop_time < frame_duration) {
+            this_thread::sleep_for(frame_duration - loop_time);
         }
 
         if (waitKey(1) >= 0) break;
     }
 
     close_udp_sockets();
+    destroyAllWindows();
 }
-void run_receiver() {
-    constexpr int MAX_BUFFER = 1500;
-    const std::vector<int> ports = {45094, 44824, 33061, 55008};
 
-    std::vector<int> sockets;
+void run_receiver(const vector<int>& ports) {
+    constexpr int MAX_BUFFER = 1500;
+    vector<int> sockets;
     for (int port : ports) {
         int sock = socket(AF_INET, SOCK_DGRAM, 0);
         sockaddr_in addr{};
@@ -96,20 +115,20 @@ void run_receiver() {
         bind(sock, (sockaddr*)&addr, sizeof(addr));
         fcntl(sock, F_SETFL, O_NONBLOCK);
         sockets.push_back(sock);
-        std::cout << "Listening UDP " << port << "\n";
+        cout << "Listening UDP " << port << endl;
     }
 
     H264Decoder decoder;
     Mat reconstructed_frame;
     bool has_received = false;
 
-    SmartFrameCollector collector([&](const std::vector<uint8_t>& data) {
+    SmartFrameCollector collector([&](const vector<uint8_t>& data) {
         if (decoder.decode(data, reconstructed_frame)) {
             has_received = true;
         }
     });
 
-    std::cout << "Receiver başlatıldı...\n";
+    cout << "Receiver started..." << endl;
 
     while (true) {
         for (int sock : sockets) {
@@ -128,13 +147,13 @@ void run_receiver() {
             display_frame = reconstructed_frame.clone();
         } else {
             display_frame = Mat::zeros(720, 1280, CV_8UC3);
-            putText(display_frame, "Waiting for Client to Connect..", {200, 360}, FONT_HERSHEY_SIMPLEX, 1.5, Scalar(255,255,255), 3);
+            putText(display_frame, "Waiting for Client to Connect..", Point(200, 360), FONT_HERSHEY_SIMPLEX, 1.5, Scalar(255,255,255), 3);
         }
 
         imshow("NovaEngine - Receiver", display_frame);
 
         if (waitKey(1) == 27) break;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        this_thread::sleep_for(chrono::milliseconds(1));
     }
 
     for (int sock : sockets) close(sock);

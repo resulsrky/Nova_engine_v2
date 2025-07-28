@@ -4,36 +4,22 @@
 #include <string>
 #include <iostream>
 
-int main(int argc, char* argv[]) {
+int main(int argc, char** argv) {
     if (argc < 3) {
-        std::cerr << "Usage: ./novaengine <public_ip> <port1> <port2> ...\n";
+        std::cerr << "Usage: " << argv[0] << " <public_ip> <port1> [port2 ...]" << std::endl;
         return 1;
     }
 
-    std::string target_ip = argv[1];
-    std::vector<int> target_ports;
+    std::string public_ip = argv[1];
+    std::vector<int> ports;
     for (int i = 2; i < argc; ++i) {
-        target_ports.push_back(std::stoi(argv[i]));
+        ports.push_back(std::stoi(argv[i]));
     }
 
-    // Sender thread
-    std::thread sender_thread([&]() {
-        std::vector<std::string> args = {"sender", target_ip};
-        for (int port : target_ports)
-            args.push_back(std::to_string(port));
+    std::thread sender(run_sender, public_ip, ports);
+    std::thread receiver(run_receiver, ports);
 
-        std::vector<char*> argv_c;
-        for (auto& arg : args)
-            argv_c.push_back(arg.data());
-
-        run_sender(argv_c.size(), argv_c.data());
-    });
-
-    // Receiver thread
-    std::thread receiver_thread(run_receiver);
-
-    sender_thread.join();
-    receiver_thread.join();
-
+    sender.join();
+    receiver.join();
     return 0;
 }
