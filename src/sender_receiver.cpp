@@ -36,7 +36,7 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
         exit(1);
     }
 
-    int width = 640, height = 480, fps = 30, bitrate = 400000;
+    int width = 640, height = 480, fps = 30, bitrate = 600000;
     VideoCapture cap(0, cv::CAP_V4L2);
     cap.set(CAP_PROP_FRAME_WIDTH, width);
     cap.set(CAP_PROP_FRAME_HEIGHT, height);
