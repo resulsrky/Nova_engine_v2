@@ -1,7 +1,8 @@
 #include "packet_parser.hpp"
 #include <cstring>
 #include <stdexcept>
-
+#include <cstdint>
+#include <cstddef>
 // Paket formatı:
 // [0-1]   frame_id      (2 byte)
 // [2]     chunk_id      (1 byte)

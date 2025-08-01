@@ -16,17 +16,18 @@ struct PathStats {
 
 class WeightedScheduler {
 public:
-    WeightedScheduler(const std::vector<PathStats>& paths);
-
-    // Rastgele path seçer, ağırlıklara göre
+    explicit WeightedScheduler(const std::vector<PathStats>& paths);
     PathStats select_path();
 
 private:
     std::vector<PathStats> paths_;
     std::vector<int> cumulative_weights_;
+    int total_weight = 0;
     std::mt19937 rng;
-    int total_weight;
 
     void build_weight_table();
 };
 
+// 🔥 Global olarak seçimi kolaylaştıran interface
+void init_scheduler(const std::vector<int>& ports); // Basit RTT bilmeden başlatmak için
+int select_port_for_chunk(int chunk_id);

@@ -12,7 +12,13 @@ file(GLOB_RECURSE SOURCES
         ${CMAKE_SOURCE_DIR}/src/*.cpp
 )
 
-add_executable(novaengine ${SOURCES})
+add_executable(novaengine ${SOURCES}
+        include/chunk_dispatcher.hpp
+        src/chunk_dispatcher.cpp
+        include/rtt_monitor.hpp
+        src/rtt_monitor.cpp
+        include/loss_tracker.hpp
+        src/loss_tracker.cpp)
 
 # OpenCV
 find_package(OpenCV REQUIRED)
