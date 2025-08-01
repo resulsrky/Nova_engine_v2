@@ -1,6 +1,7 @@
 CMakeFiles/novaengine.dir/src/main.cpp.o: \
- /home/ryuzaki/Desktop/NovaEngine/src/main.cpp /usr/include/stdc-predef.h \
- /home/ryuzaki/Desktop/NovaEngine/include/sender_receiver.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/src/main.cpp \
+ /usr/include/stdc-predef.h \
+ /home/raulcto/CLionProjects/NovaEngine/include/sender_receiver.hpp \
  /usr/include/c++/11/string \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

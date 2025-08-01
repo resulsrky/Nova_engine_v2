@@ -1,7 +1,7 @@
 CMakeFiles/novaengine.dir/src/erasure_coder.cpp.o: \
- /home/ryuzaki/Desktop/NovaEngine/src/erasure_coder.cpp \
+ /home/raulcto/CLionProjects/NovaEngine/src/erasure_coder.cpp \
  /usr/include/stdc-predef.h \
- /home/ryuzaki/Desktop/NovaEngine/include/erasure_coder.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/include/erasure_coder.hpp \
  /usr/include/c++/11/vector /usr/include/c++/11/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -134,7 +134,7 @@ CMakeFiles/novaengine.dir/src/erasure_coder.cpp.o: \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
  /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
  /usr/include/c++/11/bits/charconv.h \
- /usr/include/c++/11/bits/basic_string.tcc /usr/local/include/jerasure.h \
+ /usr/include/c++/11/bits/basic_string.tcc /usr/include/jerasure.h \
  /usr/include/jerasure/galois.h /usr/include/gf_complete.h \
  /usr/include/jerasure/reed_sol.h /usr/include/c++/11/cstring \
  /usr/include/string.h /usr/include/strings.h \

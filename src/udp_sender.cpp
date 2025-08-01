@@ -37,6 +37,7 @@ bool init_udp_sockets(const std::vector<int>& local_ports) {
         int flags = fcntl(sock, F_GETFL, 0);
         fcntl(sock, F_SETFL, flags | O_NONBLOCK);
         
+        // Bind to specific port for receiver, but let system assign port for sender
         sockaddr_in addr{};
         addr.sin_family = AF_INET;
         addr.sin_port = htons(port);

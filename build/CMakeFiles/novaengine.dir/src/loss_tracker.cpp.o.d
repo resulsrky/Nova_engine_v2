@@ -1,7 +1,7 @@
 CMakeFiles/novaengine.dir/src/loss_tracker.cpp.o: \
- /home/ryuzaki/Desktop/NovaEngine/src/loss_tracker.cpp \
+ /home/raulcto/CLionProjects/NovaEngine/src/loss_tracker.cpp \
  /usr/include/stdc-predef.h \
- /home/ryuzaki/Desktop/NovaEngine/include/loss_tracker.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/include/loss_tracker.hpp \
  /usr/include/c++/11/unordered_map /usr/include/c++/11/type_traits \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

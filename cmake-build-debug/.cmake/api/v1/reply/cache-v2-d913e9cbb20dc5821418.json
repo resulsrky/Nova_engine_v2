@@ -79,7 +79,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/ryuzaki/Desktop/NovaEngine/cmake-build-debug"
+			"value" : "/home/raulcto/CLionProjects/NovaEngine/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -103,7 +103,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "30"
+			"value" : "31"
 		},
 		{
 			"name" : "CMAKE_CACHE_PATCH_VERSION",
@@ -115,7 +115,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "5"
+			"value" : "6"
 		},
 		{
 			"name" : "CMAKE_COLOR_DIAGNOSTICS",
@@ -155,7 +155,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/ryuzaki/Desktop/C++/clion-2024.3.4/bin/cmake/linux/x64/bin/cmake"
+			"value" : "/home/raulcto/Desktop/clion-2025.1.4/bin/cmake/linux/x64/bin/cmake"
 		},
 		{
 			"name" : "CMAKE_CPACK_COMMAND",
@@ -167,7 +167,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/ryuzaki/Desktop/C++/clion-2024.3.4/bin/cmake/linux/x64/bin/cpack"
+			"value" : "/home/raulcto/Desktop/clion-2025.1.4/bin/cmake/linux/x64/bin/cpack"
 		},
 		{
 			"name" : "CMAKE_CTEST_COMMAND",
@@ -179,7 +179,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/ryuzaki/Desktop/C++/clion-2024.3.4/bin/cmake/linux/x64/bin/ctest"
+			"value" : "/home/raulcto/Desktop/clion-2025.1.4/bin/cmake/linux/x64/bin/ctest"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER",
@@ -583,7 +583,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/ryuzaki/Desktop/NovaEngine/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/home/raulcto/CLionProjects/NovaEngine/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -643,7 +643,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/ryuzaki/Desktop/NovaEngine"
+			"value" : "/home/raulcto/CLionProjects/NovaEngine"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -931,7 +931,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/ryuzaki/Desktop/C++/clion-2024.3.4/bin/cmake/linux/x64/share/cmake-3.30"
+			"value" : "/home/raulcto/Desktop/clion-2025.1.4/bin/cmake/linux/x64/share/cmake-3.31"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1219,7 +1219,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/usr/local/lib/libJerasure.so"
+			"value" : "/usr/lib/x86_64-linux-gnu/libJerasure.so"
 		},
 		{
 			"name" : "NovaEngine_BINARY_DIR",
@@ -1231,7 +1231,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/ryuzaki/Desktop/NovaEngine/cmake-build-debug"
+			"value" : "/home/raulcto/CLionProjects/NovaEngine/cmake-build-debug"
 		},
 		{
 			"name" : "NovaEngine_IS_TOP_LEVEL",
@@ -1255,7 +1255,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/ryuzaki/Desktop/NovaEngine"
+			"value" : "/home/raulcto/CLionProjects/NovaEngine"
 		},
 		{
 			"name" : "OpenCV_DIR",
@@ -1280,6 +1280,30 @@
 			],
 			"type" : "FILEPATH",
 			"value" : "/usr/lib/x86_64-linux-gnu/libswscale.so"
+		},
+		{
+			"name" : "_CMAKE_CXX_LINKER_PUSHPOP_STATE_SUPPORTED",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "linker supports push/pop state"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "TRUE"
+		},
+		{
+			"name" : "_CMAKE_C_LINKER_PUSHPOP_STATE_SUPPORTED",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "linker supports push/pop state"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "TRUE"
 		},
 		{
 			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",

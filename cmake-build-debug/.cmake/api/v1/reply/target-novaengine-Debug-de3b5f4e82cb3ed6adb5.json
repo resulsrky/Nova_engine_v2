@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "/home/ryuzaki/Desktop/NovaEngine/bin/novaengine"
+			"path" : "/home/raulcto/CLionProjects/NovaEngine/bin/novaengine"
 		}
 	],
 	"backtrace" : 1,
@@ -80,7 +80,7 @@
 			[
 				{
 					"backtrace" : 5,
-					"path" : "/home/ryuzaki/Desktop/NovaEngine/include"
+					"path" : "/home/raulcto/CLionProjects/NovaEngine/include"
 				},
 				{
 					"backtrace" : 6,
@@ -133,10 +133,6 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
-			},
-			{
-				"fragment" : "-Wl,-rpath,/usr/local/lib",
-				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
@@ -330,7 +326,7 @@
 			},
 			{
 				"backtrace" : 3,
-				"fragment" : "/usr/local/lib/libJerasure.so",
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libJerasure.so",
 				"role" : "libraries"
 			},
 			{

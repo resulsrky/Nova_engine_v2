@@ -1,7 +1,7 @@
 CMakeFiles/novaengine.dir/src/ping_sender.cpp.o: \
- /home/ryuzaki/Desktop/NovaEngine/src/ping_sender.cpp \
+ /home/raulcto/CLionProjects/NovaEngine/src/ping_sender.cpp \
  /usr/include/stdc-predef.h \
- /home/ryuzaki/Desktop/NovaEngine/include/ping_sender.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/include/ping_sender.hpp \
  /usr/include/c++/11/string \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

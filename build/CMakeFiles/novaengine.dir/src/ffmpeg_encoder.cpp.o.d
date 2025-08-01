@@ -1,7 +1,7 @@
 CMakeFiles/novaengine.dir/src/ffmpeg_encoder.cpp.o: \
- /home/ryuzaki/Desktop/NovaEngine/src/ffmpeg_encoder.cpp \
+ /home/raulcto/CLionProjects/NovaEngine/src/ffmpeg_encoder.cpp \
  /usr/include/stdc-predef.h \
- /home/ryuzaki/Desktop/NovaEngine/include/ffmpeg_encoder.h \
+ /home/raulcto/CLionProjects/NovaEngine/include/ffmpeg_encoder.h \
  /usr/include/x86_64-linux-gnu/libavcodec/avcodec.h /usr/include/errno.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \

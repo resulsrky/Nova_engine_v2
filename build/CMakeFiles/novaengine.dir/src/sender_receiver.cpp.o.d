@@ -1,7 +1,7 @@
 CMakeFiles/novaengine.dir/src/sender_receiver.cpp.o: \
- /home/ryuzaki/Desktop/NovaEngine/src/sender_receiver.cpp \
+ /home/raulcto/CLionProjects/NovaEngine/src/sender_receiver.cpp \
  /usr/include/stdc-predef.h \
- /home/ryuzaki/Desktop/NovaEngine/include/sender_receiver.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/include/sender_receiver.hpp \
  /usr/include/c++/11/string \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -134,7 +134,7 @@ CMakeFiles/novaengine.dir/src/sender_receiver.cpp.o: \
  /usr/include/c++/11/bits/stl_vector.h \
  /usr/include/c++/11/bits/stl_bvector.h \
  /usr/include/c++/11/bits/vector.tcc \
- /home/ryuzaki/Desktop/NovaEngine/include/ffmpeg_encoder.h \
+ /home/raulcto/CLionProjects/NovaEngine/include/ffmpeg_encoder.h \
  /usr/include/x86_64-linux-gnu/libavcodec/avcodec.h \
  /usr/include/x86_64-linux-gnu/libavutil/samplefmt.h \
  /usr/include/x86_64-linux-gnu/libavutil/avutil.h \
@@ -307,14 +307,14 @@ CMakeFiles/novaengine.dir/src/sender_receiver.cpp.o: \
  /usr/include/opencv4/opencv2/core/optim.hpp \
  /usr/include/opencv4/opencv2/core/ovx.hpp \
  /usr/include/opencv4/opencv2/core/cvdef.h \
- /home/ryuzaki/Desktop/NovaEngine/include/slicer.hpp \
- /home/ryuzaki/Desktop/NovaEngine/include/erasure_coder.hpp \
- /home/ryuzaki/Desktop/NovaEngine/include/udp_sender.hpp \
- /home/ryuzaki/Desktop/NovaEngine/include/packet_parser.hpp \
- /home/ryuzaki/Desktop/NovaEngine/include/smart_collector.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/include/slicer.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/include/erasure_coder.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/include/udp_sender.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/include/packet_parser.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/include/smart_collector.hpp \
  /usr/include/c++/11/thread /usr/include/c++/11/bits/std_thread.h \
  /usr/include/c++/11/bits/this_thread_sleep.h \
- /home/ryuzaki/Desktop/NovaEngine/include/decode_and_display.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/include/decode_and_display.hpp \
  /usr/include/opencv4/opencv2/opencv.hpp \
  /usr/include/opencv4/opencv2/calib3d.hpp \
  /usr/include/opencv4/opencv2/features2d.hpp \
@@ -410,8 +410,8 @@ CMakeFiles/novaengine.dir/src/sender_receiver.cpp.o: \
  /usr/include/opencv4/opencv2/video.hpp \
  /usr/include/opencv4/opencv2/video/tracking.hpp \
  /usr/include/opencv4/opencv2/video/background_segm.hpp \
- /home/ryuzaki/Desktop/NovaEngine/include/rtt_monitor.hpp \
- /home/ryuzaki/Desktop/NovaEngine/include/loss_tracker.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/include/rtt_monitor.hpp \
+ /home/raulcto/CLionProjects/NovaEngine/include/loss_tracker.hpp \
  /usr/include/fcntl.h /usr/include/x86_64-linux-gnu/bits/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h \

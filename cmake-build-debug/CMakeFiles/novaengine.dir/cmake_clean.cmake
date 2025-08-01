@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/ryuzaki/Desktop/NovaEngine/bin/novaengine"
-  "/home/ryuzaki/Desktop/NovaEngine/bin/novaengine.pdb"
+  "/home/raulcto/CLionProjects/NovaEngine/bin/novaengine"
+  "/home/raulcto/CLionProjects/NovaEngine/bin/novaengine.pdb"
   "CMakeFiles/novaengine.dir/src/chunk_dispatcher.cpp.o"
   "CMakeFiles/novaengine.dir/src/chunk_dispatcher.cpp.o.d"
   "CMakeFiles/novaengine.dir/src/decode_and_display.cpp.o"
