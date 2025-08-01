@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/ryuzaki/Desktop/NoveEngine/include -isystem /usr/include/opencv4
+CXX_INCLUDES = -I/home/ryuzaki/Desktop/NovaEngine/include -I/usr/include/jerasure -isystem /usr/include/opencv4
 
 CXX_FLAGS = -std=gnu++17
 

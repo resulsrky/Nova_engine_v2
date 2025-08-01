@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ryuzaki/Desktop/NoveEngine
+CMAKE_SOURCE_DIR = /home/ryuzaki/Desktop/NovaEngine
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ryuzaki/Desktop/NoveEngine/build
+CMAKE_BINARY_DIR = /home/ryuzaki/Desktop/NovaEngine/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ryuzaki/Desktop/NoveEngine/build/CMakeFiles /home/ryuzaki/Desktop/NoveEngine/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ryuzaki/Desktop/NovaEngine/build/CMakeFiles /home/ryuzaki/Desktop/NovaEngine/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ryuzaki/Desktop/NoveEngine/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ryuzaki/Desktop/NovaEngine/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -129,6 +129,30 @@ novaengine/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/build
 .PHONY : novaengine/fast
 
+src/chunk_dispatcher.o: src/chunk_dispatcher.cpp.o
+.PHONY : src/chunk_dispatcher.o
+
+# target to build an object file
+src/chunk_dispatcher.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/chunk_dispatcher.cpp.o
+.PHONY : src/chunk_dispatcher.cpp.o
+
+src/chunk_dispatcher.i: src/chunk_dispatcher.cpp.i
+.PHONY : src/chunk_dispatcher.i
+
+# target to preprocess a source file
+src/chunk_dispatcher.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/chunk_dispatcher.cpp.i
+.PHONY : src/chunk_dispatcher.cpp.i
+
+src/chunk_dispatcher.s: src/chunk_dispatcher.cpp.s
+.PHONY : src/chunk_dispatcher.s
+
+# target to generate assembly for a file
+src/chunk_dispatcher.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/chunk_dispatcher.cpp.s
+.PHONY : src/chunk_dispatcher.cpp.s
+
 src/decode_and_display.o: src/decode_and_display.cpp.o
 .PHONY : src/decode_and_display.o
 
@@ -152,6 +176,30 @@ src/decode_and_display.s: src/decode_and_display.cpp.s
 src/decode_and_display.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/decode_and_display.cpp.s
 .PHONY : src/decode_and_display.cpp.s
+
+src/erasure_coder.o: src/erasure_coder.cpp.o
+.PHONY : src/erasure_coder.o
+
+# target to build an object file
+src/erasure_coder.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/erasure_coder.cpp.o
+.PHONY : src/erasure_coder.cpp.o
+
+src/erasure_coder.i: src/erasure_coder.cpp.i
+.PHONY : src/erasure_coder.i
+
+# target to preprocess a source file
+src/erasure_coder.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/erasure_coder.cpp.i
+.PHONY : src/erasure_coder.cpp.i
+
+src/erasure_coder.s: src/erasure_coder.cpp.s
+.PHONY : src/erasure_coder.s
+
+# target to generate assembly for a file
+src/erasure_coder.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/erasure_coder.cpp.s
+.PHONY : src/erasure_coder.cpp.s
 
 src/ffmpeg_encoder.o: src/ffmpeg_encoder.cpp.o
 .PHONY : src/ffmpeg_encoder.o
@@ -177,6 +225,30 @@ src/ffmpeg_encoder.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/ffmpeg_encoder.cpp.s
 .PHONY : src/ffmpeg_encoder.cpp.s
 
+src/loss_tracker.o: src/loss_tracker.cpp.o
+.PHONY : src/loss_tracker.o
+
+# target to build an object file
+src/loss_tracker.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/loss_tracker.cpp.o
+.PHONY : src/loss_tracker.cpp.o
+
+src/loss_tracker.i: src/loss_tracker.cpp.i
+.PHONY : src/loss_tracker.i
+
+# target to preprocess a source file
+src/loss_tracker.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/loss_tracker.cpp.i
+.PHONY : src/loss_tracker.cpp.i
+
+src/loss_tracker.s: src/loss_tracker.cpp.s
+.PHONY : src/loss_tracker.s
+
+# target to generate assembly for a file
+src/loss_tracker.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/loss_tracker.cpp.s
+.PHONY : src/loss_tracker.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -200,6 +272,126 @@ src/main.s: src/main.cpp.s
 src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
+
+src/packet_parser.o: src/packet_parser.cpp.o
+.PHONY : src/packet_parser.o
+
+# target to build an object file
+src/packet_parser.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/packet_parser.cpp.o
+.PHONY : src/packet_parser.cpp.o
+
+src/packet_parser.i: src/packet_parser.cpp.i
+.PHONY : src/packet_parser.i
+
+# target to preprocess a source file
+src/packet_parser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/packet_parser.cpp.i
+.PHONY : src/packet_parser.cpp.i
+
+src/packet_parser.s: src/packet_parser.cpp.s
+.PHONY : src/packet_parser.s
+
+# target to generate assembly for a file
+src/packet_parser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/packet_parser.cpp.s
+.PHONY : src/packet_parser.cpp.s
+
+src/ping_handler.o: src/ping_handler.cpp.o
+.PHONY : src/ping_handler.o
+
+# target to build an object file
+src/ping_handler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/ping_handler.cpp.o
+.PHONY : src/ping_handler.cpp.o
+
+src/ping_handler.i: src/ping_handler.cpp.i
+.PHONY : src/ping_handler.i
+
+# target to preprocess a source file
+src/ping_handler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/ping_handler.cpp.i
+.PHONY : src/ping_handler.cpp.i
+
+src/ping_handler.s: src/ping_handler.cpp.s
+.PHONY : src/ping_handler.s
+
+# target to generate assembly for a file
+src/ping_handler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/ping_handler.cpp.s
+.PHONY : src/ping_handler.cpp.s
+
+src/ping_sender.o: src/ping_sender.cpp.o
+.PHONY : src/ping_sender.o
+
+# target to build an object file
+src/ping_sender.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/ping_sender.cpp.o
+.PHONY : src/ping_sender.cpp.o
+
+src/ping_sender.i: src/ping_sender.cpp.i
+.PHONY : src/ping_sender.i
+
+# target to preprocess a source file
+src/ping_sender.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/ping_sender.cpp.i
+.PHONY : src/ping_sender.cpp.i
+
+src/ping_sender.s: src/ping_sender.cpp.s
+.PHONY : src/ping_sender.s
+
+# target to generate assembly for a file
+src/ping_sender.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/ping_sender.cpp.s
+.PHONY : src/ping_sender.cpp.s
+
+src/rtt_monitor.o: src/rtt_monitor.cpp.o
+.PHONY : src/rtt_monitor.o
+
+# target to build an object file
+src/rtt_monitor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/rtt_monitor.cpp.o
+.PHONY : src/rtt_monitor.cpp.o
+
+src/rtt_monitor.i: src/rtt_monitor.cpp.i
+.PHONY : src/rtt_monitor.i
+
+# target to preprocess a source file
+src/rtt_monitor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/rtt_monitor.cpp.i
+.PHONY : src/rtt_monitor.cpp.i
+
+src/rtt_monitor.s: src/rtt_monitor.cpp.s
+.PHONY : src/rtt_monitor.s
+
+# target to generate assembly for a file
+src/rtt_monitor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/rtt_monitor.cpp.s
+.PHONY : src/rtt_monitor.cpp.s
+
+src/scheduler.o: src/scheduler.cpp.o
+.PHONY : src/scheduler.o
+
+# target to build an object file
+src/scheduler.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/scheduler.cpp.o
+.PHONY : src/scheduler.cpp.o
+
+src/scheduler.i: src/scheduler.cpp.i
+.PHONY : src/scheduler.i
+
+# target to preprocess a source file
+src/scheduler.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/scheduler.cpp.i
+.PHONY : src/scheduler.cpp.i
+
+src/scheduler.s: src/scheduler.cpp.s
+.PHONY : src/scheduler.s
+
+# target to generate assembly for a file
+src/scheduler.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/novaengine.dir/build.make CMakeFiles/novaengine.dir/src/scheduler.cpp.s
+.PHONY : src/scheduler.cpp.s
 
 src/sender_receiver.o: src/sender_receiver.cpp.o
 .PHONY : src/sender_receiver.o
@@ -306,15 +498,39 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... novaengine"
+	@echo "... src/chunk_dispatcher.o"
+	@echo "... src/chunk_dispatcher.i"
+	@echo "... src/chunk_dispatcher.s"
 	@echo "... src/decode_and_display.o"
 	@echo "... src/decode_and_display.i"
 	@echo "... src/decode_and_display.s"
+	@echo "... src/erasure_coder.o"
+	@echo "... src/erasure_coder.i"
+	@echo "... src/erasure_coder.s"
 	@echo "... src/ffmpeg_encoder.o"
 	@echo "... src/ffmpeg_encoder.i"
 	@echo "... src/ffmpeg_encoder.s"
+	@echo "... src/loss_tracker.o"
+	@echo "... src/loss_tracker.i"
+	@echo "... src/loss_tracker.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/packet_parser.o"
+	@echo "... src/packet_parser.i"
+	@echo "... src/packet_parser.s"
+	@echo "... src/ping_handler.o"
+	@echo "... src/ping_handler.i"
+	@echo "... src/ping_handler.s"
+	@echo "... src/ping_sender.o"
+	@echo "... src/ping_sender.i"
+	@echo "... src/ping_sender.s"
+	@echo "... src/rtt_monitor.o"
+	@echo "... src/rtt_monitor.i"
+	@echo "... src/rtt_monitor.s"
+	@echo "... src/scheduler.o"
+	@echo "... src/scheduler.i"
+	@echo "... src/scheduler.s"
 	@echo "... src/sender_receiver.o"
 	@echo "... src/sender_receiver.i"
 	@echo "... src/sender_receiver.s"

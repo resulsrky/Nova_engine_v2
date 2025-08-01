@@ -1,7 +1,7 @@
 CMakeFiles/novaengine.dir/src/ffmpeg_encoder.cpp.o: \
- /home/ryuzaki/Desktop/NoveEngine/src/ffmpeg_encoder.cpp \
+ /home/ryuzaki/Desktop/NovaEngine/src/ffmpeg_encoder.cpp \
  /usr/include/stdc-predef.h \
- /home/ryuzaki/Desktop/NoveEngine/include/ffmpeg_encoder.h \
+ /home/ryuzaki/Desktop/NovaEngine/include/ffmpeg_encoder.h \
  /usr/include/x86_64-linux-gnu/libavcodec/avcodec.h /usr/include/errno.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -300,4 +300,8 @@ CMakeFiles/novaengine.dir/src/ffmpeg_encoder.cpp.o: \
  /usr/include/c++/11/bits/unique_lock.h \
  /usr/include/opencv4/opencv2/core/optim.hpp \
  /usr/include/opencv4/opencv2/core/ovx.hpp \
- /usr/include/opencv4/opencv2/core/cvdef.h /usr/include/c++/11/iostream
+ /usr/include/opencv4/opencv2/core/cvdef.h /usr/include/c++/11/iostream \
+ /usr/include/c++/11/thread /usr/include/c++/11/bits/std_thread.h \
+ /usr/include/c++/11/bits/this_thread_sleep.h \
+ /usr/include/opencv4/opencv2/imgproc.hpp \
+ /usr/include/opencv4/opencv2/imgproc/segmentation.hpp

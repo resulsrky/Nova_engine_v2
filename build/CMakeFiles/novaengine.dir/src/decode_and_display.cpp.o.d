@@ -1,7 +1,7 @@
 CMakeFiles/novaengine.dir/src/decode_and_display.cpp.o: \
- /home/ryuzaki/Desktop/NoveEngine/src/decode_and_display.cpp \
+ /home/ryuzaki/Desktop/NovaEngine/src/decode_and_display.cpp \
  /usr/include/stdc-predef.h \
- /home/ryuzaki/Desktop/NoveEngine/include/decode_and_display.hpp \
+ /home/ryuzaki/Desktop/NovaEngine/include/decode_and_display.hpp \
  /usr/include/x86_64-linux-gnu/libavcodec/avcodec.h /usr/include/errno.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \

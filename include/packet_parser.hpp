@@ -7,6 +7,7 @@ struct ChunkPacket {
     uint16_t frame_id;
     uint8_t chunk_id;
     uint8_t total_chunks;
+    int64_t timestamp;  // Microsecond timestamp for RTT calculation
     std::vector<uint8_t> payload;
 };
 

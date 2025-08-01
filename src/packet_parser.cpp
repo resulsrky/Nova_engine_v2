@@ -7,11 +7,12 @@
 // [0-1]   frame_id      (2 byte)
 // [2]     chunk_id      (1 byte)
 // [3]     total_chunks  (1 byte)
-// [4...]  payload       (kalan veri)
+// [4-11]  timestamp     (8 byte - int64_t)
+// [12...] payload       (kalan veri)
 
 std::vector<uint8_t> serialize_packet(const ChunkPacket& pkt) {
     std::vector<uint8_t> buffer;
-    buffer.reserve(4 + pkt.payload.size());
+    buffer.reserve(12 + pkt.payload.size());
 
     // frame_id (2 byte - little endian)
     buffer.push_back(pkt.frame_id & 0xFF);
@@ -23,6 +24,11 @@ std::vector<uint8_t> serialize_packet(const ChunkPacket& pkt) {
     // total_chunks (1 byte)
     buffer.push_back(pkt.total_chunks);
 
+    // timestamp (8 byte - little endian)
+    for (int i = 0; i < 8; ++i) {
+        buffer.push_back((pkt.timestamp >> (i * 8)) & 0xFF);
+    }
+
     // payload
     buffer.insert(buffer.end(), pkt.payload.begin(), pkt.payload.end());
 
@@ -30,7 +36,7 @@ std::vector<uint8_t> serialize_packet(const ChunkPacket& pkt) {
 }
 
 ChunkPacket parse_packet(const uint8_t* data, size_t len) {
-    if (len < 4) {
+    if (len < 12) {
         throw std::runtime_error("[parse_packet] Paket çok kısa!");
     }
 
@@ -39,6 +45,12 @@ ChunkPacket parse_packet(const uint8_t* data, size_t len) {
     pkt.chunk_id = data[2];
     pkt.total_chunks = data[3];
 
-    pkt.payload.assign(data + 4, data + len);
+    // timestamp (8 byte - little endian)
+    pkt.timestamp = 0;
+    for (int i = 0; i < 8; ++i) {
+        pkt.timestamp |= static_cast<int64_t>(data[4 + i]) << (i * 8);
+    }
+
+    pkt.payload.assign(data + 12, data + len);
     return pkt;
 }

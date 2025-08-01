@@ -1,9 +1,8 @@
-CMakeFiles/novaengine.dir/src/udp_sender.cpp.o: \
- /home/ryuzaki/Desktop/NovaEngine/src/udp_sender.cpp \
+CMakeFiles/novaengine.dir/src/erasure_coder.cpp.o: \
+ /home/ryuzaki/Desktop/NovaEngine/src/erasure_coder.cpp \
  /usr/include/stdc-predef.h \
- /home/ryuzaki/Desktop/NovaEngine/include/udp_sender.hpp \
- /home/ryuzaki/Desktop/NovaEngine/include/packet_parser.hpp \
- /usr/include/c++/11/cstdint \
+ /home/ryuzaki/Desktop/NovaEngine/include/erasure_coder.hpp \
+ /usr/include/c++/11/vector /usr/include/c++/11/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -15,15 +14,6 @@ CMakeFiles/novaengine.dir/src/udp_sender.cpp.o: \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h \
  /usr/include/c++/11/pstl/pstl_config.h \
- /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
- /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
- /usr/include/x86_64-linux-gnu/bits/types.h \
- /usr/include/x86_64-linux-gnu/bits/typesizes.h \
- /usr/include/x86_64-linux-gnu/bits/time64.h \
- /usr/include/x86_64-linux-gnu/bits/wchar.h \
- /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
- /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
- /usr/include/c++/11/vector /usr/include/c++/11/bits/stl_algobase.h \
  /usr/include/c++/11/bits/functexcept.h \
  /usr/include/c++/11/bits/exception_defines.h \
  /usr/include/c++/11/bits/cpp_type_traits.h \
@@ -53,8 +43,20 @@ CMakeFiles/novaengine.dir/src/udp_sender.cpp.o: \
  /usr/include/c++/11/bits/functional_hash.h \
  /usr/include/c++/11/bits/hash_bytes.h \
  /usr/include/c++/11/bits/range_access.h \
- /usr/include/c++/11/bits/vector.tcc /usr/include/c++/11/cstddef \
+ /usr/include/c++/11/bits/vector.tcc /usr/include/c++/11/cstdint \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
+ /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
+ /usr/include/x86_64-linux-gnu/bits/types.h \
+ /usr/include/x86_64-linux-gnu/bits/typesizes.h \
+ /usr/include/x86_64-linux-gnu/bits/time64.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+ /usr/include/c++/11/stdexcept /usr/include/c++/11/exception \
+ /usr/include/c++/11/bits/exception_ptr.h \
+ /usr/include/c++/11/bits/cxxabi_init_exception.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
+ /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/nested_exception.h \
  /usr/include/c++/11/string /usr/include/c++/11/bits/stringfwd.h \
  /usr/include/c++/11/bits/char_traits.h \
  /usr/include/c++/11/bits/postypes.h /usr/include/c++/11/cwchar \
@@ -132,43 +134,17 @@ CMakeFiles/novaengine.dir/src/udp_sender.cpp.o: \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
  /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
  /usr/include/c++/11/bits/charconv.h \
- /usr/include/c++/11/bits/basic_string.tcc \
- /usr/include/x86_64-linux-gnu/sys/socket.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h \
- /usr/include/x86_64-linux-gnu/bits/socket.h \
- /usr/include/x86_64-linux-gnu/bits/socket_type.h \
- /usr/include/x86_64-linux-gnu/bits/sockaddr.h \
- /usr/include/x86_64-linux-gnu/asm/socket.h \
- /usr/include/asm-generic/socket.h /usr/include/linux/posix_types.h \
- /usr/include/linux/stddef.h \
- /usr/include/x86_64-linux-gnu/asm/posix_types.h \
- /usr/include/x86_64-linux-gnu/asm/posix_types_64.h \
- /usr/include/asm-generic/posix_types.h \
- /usr/include/x86_64-linux-gnu/asm/bitsperlong.h \
- /usr/include/asm-generic/bitsperlong.h \
- /usr/include/x86_64-linux-gnu/asm/sockios.h \
- /usr/include/asm-generic/sockios.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_osockaddr.h \
- /usr/include/netinet/in.h /usr/include/x86_64-linux-gnu/bits/in.h \
- /usr/include/arpa/inet.h /usr/include/unistd.h \
- /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
- /usr/include/x86_64-linux-gnu/bits/environments.h \
- /usr/include/x86_64-linux-gnu/bits/confname.h \
- /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
- /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
- /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
- /usr/include/linux/close_range.h /usr/include/c++/11/iostream \
- /usr/include/c++/11/ostream /usr/include/c++/11/ios \
- /usr/include/c++/11/exception /usr/include/c++/11/bits/exception_ptr.h \
- /usr/include/c++/11/bits/cxxabi_init_exception.h \
- /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/nested_exception.h \
- /usr/include/c++/11/bits/ios_base.h \
+ /usr/include/c++/11/bits/basic_string.tcc /usr/local/include/jerasure.h \
+ /usr/include/jerasure/galois.h /usr/include/gf_complete.h \
+ /usr/include/jerasure/reed_sol.h /usr/include/c++/11/cstring \
+ /usr/include/string.h /usr/include/strings.h \
+ /usr/include/c++/11/iostream /usr/include/c++/11/ostream \
+ /usr/include/c++/11/ios /usr/include/c++/11/bits/ios_base.h \
  /usr/include/c++/11/bits/locale_classes.h \
  /usr/include/c++/11/bits/locale_classes.tcc \
  /usr/include/c++/11/system_error \
  /usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h \
- /usr/include/c++/11/stdexcept /usr/include/c++/11/streambuf \
- /usr/include/c++/11/bits/streambuf.tcc \
+ /usr/include/c++/11/streambuf /usr/include/c++/11/bits/streambuf.tcc \
  /usr/include/c++/11/bits/basic_ios.h \
  /usr/include/c++/11/bits/locale_facets.h /usr/include/c++/11/cwctype \
  /usr/include/wctype.h /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
@@ -178,17 +154,4 @@ CMakeFiles/novaengine.dir/src/udp_sender.cpp.o: \
  /usr/include/c++/11/bits/locale_facets.tcc \
  /usr/include/c++/11/bits/basic_ios.tcc \
  /usr/include/c++/11/bits/ostream.tcc /usr/include/c++/11/istream \
- /usr/include/c++/11/bits/istream.tcc /usr/include/fcntl.h \
- /usr/include/x86_64-linux-gnu/bits/fcntl.h \
- /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
- /usr/include/linux/falloc.h /usr/include/x86_64-linux-gnu/bits/stat.h \
- /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
- /usr/include/c++/11/chrono /usr/include/c++/11/ratio \
- /usr/include/c++/11/limits /usr/include/c++/11/ctime \
- /usr/include/c++/11/bits/parse_numbers.h /usr/include/c++/11/thread \
- /usr/include/c++/11/bits/std_thread.h /usr/include/c++/11/tuple \
- /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h \
- /usr/include/c++/11/array /usr/include/c++/11/bits/uses_allocator.h \
- /usr/include/c++/11/bits/invoke.h /usr/include/c++/11/bits/refwrap.h \
- /usr/include/c++/11/bits/unique_ptr.h \
- /usr/include/c++/11/bits/this_thread_sleep.h
+ /usr/include/c++/11/bits/istream.tcc

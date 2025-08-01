@@ -330,8 +330,23 @@ void run_receiver(const vector<int>& ports) {
         for (int sock : sockets) {
             uint8_t buf[MAX_BUFFER];
             ssize_t len = recv(sock, buf, sizeof(buf), 0);
-            if (len >= 4) {
+            if (len >= 12) { // Updated minimum size for timestamp
                 auto pkt = parse_packet(buf, len);
+                
+                // Calculate RTT if timestamp is present
+                if (pkt.timestamp > 0) {
+                    auto now_us = chrono::duration_cast<chrono::microseconds>(
+                        Clock::now().time_since_epoch()).count();
+                    auto rtt_us = now_us - pkt.timestamp;
+                    auto rtt_ms = rtt_us / 1000.0;
+                    
+                    // Log RTT occasionally
+                    static int rtt_log_counter = 0;
+                    if (++rtt_log_counter % 100 == 0) {
+                        cout << "[RTT] Frame " << pkt.frame_id << " RTT: " << rtt_ms << "ms" << endl;
+                    }
+                }
+                
                 collector.handle(pkt);
             }
         }
