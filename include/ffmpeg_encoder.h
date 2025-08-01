@@ -22,7 +22,7 @@ private:
     int m_width, m_height, m_fps, m_bitrate;
     int frameCounter = 0;
 
-    AVCodec* codec = nullptr;
+    const AVCodec* codec = nullptr;
     AVCodecContext* codecContext = nullptr;
     AVFrame* frame = nullptr;
     AVPacket* pkt = nullptr;
