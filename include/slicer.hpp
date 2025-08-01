@@ -1,15 +1,16 @@
 #pragma once
-
 #include <vector>
 #include <cstdint>
-#include <cstddef>
-
-constexpr size_t MAX_CHUNK_SIZE = 1000;    // Payload boyutu
-constexpr size_t HEADER_SIZE = 4;          // frame_id(2) + chunk_id(1) + total_chunks(1)
 
 struct Chunk {
-    std::vector<uint8_t> data;  // Header + Payload birleşik halde
+    uint32_t frame_id;
+    uint16_t chunk_id;
+    uint16_t total_chunks;
+    std::vector<uint8_t> payload;
 };
 
-// Frame verisini küçük parçalara ayırır
-std::vector<Chunk> slice_frame(const uint8_t* frame_data, size_t frame_size, uint16_t frame_id);
+// Slice frame data into k chunks (no parity)
+std::vector<Chunk> slice_frame(const std::vector<uint8_t>& frame_data,
+                               uint32_t frame_id,
+                               uint16_t chunk_size);
+
