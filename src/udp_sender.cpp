@@ -31,31 +31,25 @@ void close_udp_sockets() {
     std::cout << "[udp_sender] Tüm UDP soketler kapatıldı.\n";
 }
 
-void send_chunks_to_ports(
-    const std::vector<Chunk>& chunks,
-    const std::string& target_ip,
-    const std::vector<int>& target_ports
-) {
-    if (udp_sockets.empty() || target_ports.empty()) return;
+void send_udp(const std::string& target_ip, int port, const ChunkPacket& packet) {
+    if (udp_sockets.empty()) return;
 
-    for (const Chunk& chunk : chunks) {
-        for (size_t i = 0; i < target_ports.size(); ++i) {
-            int port = target_ports[i];
-            int sock = udp_sockets[i % udp_sockets.size()];  // gerekirse reuse
+    int sock = udp_sockets[port % udp_sockets.size()];  // socket reuse
 
-            sockaddr_in addr{};
-            addr.sin_family = AF_INET;
-            addr.sin_port = htons(port);
-            inet_pton(AF_INET, target_ip.c_str(), &addr.sin_addr);
+    sockaddr_in addr{};
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+    inet_pton(AF_INET, target_ip.c_str(), &addr.sin_addr);
 
-            ssize_t sent = sendto(sock, chunk.data.data(), chunk.data.size(), 0,
-                                  reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
+    // serialize
+    std::vector<uint8_t> buffer = serialize_packet(packet);
 
-            if (sent < 0)
-                perror("[udp_sender]  Gönderim hatası");
-            else
-                std::cout << "[udp_sender] Chunk gönderildi → port " << port
-                          << " | boyut: " << chunk.data.size() << " byte\n";
-        }
-    }
+    ssize_t sent = sendto(sock, buffer.data(), buffer.size(), 0,
+                          reinterpret_cast<sockaddr*>(&addr), sizeof(addr));
+
+    if (sent < 0)
+        perror("[udp_sender] Gönderim hatası");
+    else
+        std::cout << "[udp_sender] Chunk gönderildi → port " << port
+                  << " | boyut: " << buffer.size() << " byte\n";
 }

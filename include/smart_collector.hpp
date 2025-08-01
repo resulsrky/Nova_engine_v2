@@ -1,6 +1,7 @@
 #pragma once
 
 #include "packet_parser.hpp"
+#include "erasure_coder.hpp"
 #include <unordered_map>
 #include <vector>
 #include <functional>
@@ -10,10 +11,8 @@ class SmartFrameCollector {
 public:
     using FrameReadyCallback = std::function<void(const std::vector<uint8_t>&)>;
 
-    SmartFrameCollector(FrameReadyCallback callback);
+    SmartFrameCollector(FrameReadyCallback callback, int k, int r);
     void handle(const ChunkPacket& pkt);
-
-    // Belirli aralıklarla çağrılmalı (örneğin her frame loop'unda)
     void flush_expired_frames();
 
 private:
@@ -27,4 +26,9 @@ private:
 
     std::unordered_map<uint16_t, PartialFrame> frame_buffer;
     FrameReadyCallback callback;
+
+    ErasureCoder fec;
+    int k_; // data chunks
+    int r_; // parity chunks
 };
+
