@@ -26,8 +26,8 @@ void FFmpegEncoder::initEncoder() {
     codecContext->max_b_frames = 1;
     codecContext->pix_fmt = AV_PIX_FMT_YUV420P;
 
-    av_opt_set(codecContext->priv_data, "preset", "ultrafast", 0);
-    av_opt_set(codecContext->priv_data, "tune", "zerolatency", 0);
+    av_opt_set(codecContext->priv_data, "preset", "superfast", 0);
+    av_opt_set(codecContext->priv_data, "tune", "fastdecode", 0);
 
     if (avcodec_open2(codecContext, codec, nullptr) < 0)
         throw std::runtime_error("Failed to open codec");
