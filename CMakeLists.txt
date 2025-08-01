@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Include paths
 include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(/usr/include/jerasure)
 
 # Source files
 file(GLOB_RECURSE SOURCES
@@ -29,11 +30,13 @@ target_link_libraries(novaengine ${OpenCV_LIBS})
 find_library(AVCODEC_LIB avcodec)
 find_library(AVUTIL_LIB avutil)
 find_library(SWSCALE_LIB swscale)
+find_library(JERASURE_LIB Jerasure)
+find_library(GFCOMPLETE_LIB gf_complete)
 
-if(AVCODEC_LIB AND AVUTIL_LIB AND SWSCALE_LIB)
-    target_link_libraries(novaengine ${AVCODEC_LIB} ${AVUTIL_LIB} ${SWSCALE_LIB})
+if(AVCODEC_LIB AND AVUTIL_LIB AND SWSCALE_LIB AND JERASURE_LIB AND GFCOMPLETE_LIB)
+    target_link_libraries(novaengine ${AVCODEC_LIB} ${AVUTIL_LIB} ${SWSCALE_LIB} ${JERASURE_LIB} ${GFCOMPLETE_LIB})
 else()
-    message(FATAL_ERROR "FFmpeg libraries not found")
+    message(FATAL_ERROR "FFmpeg or Jerasure libraries not found")
 endif()
 
 # Linux sistem linkleri

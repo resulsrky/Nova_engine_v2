@@ -18,6 +18,7 @@ class WeightedScheduler {
 public:
     explicit WeightedScheduler(const std::vector<PathStats>& paths);
     PathStats select_path();
+    void update_metrics(const std::vector<PathStats>& paths);
 
 private:
     std::vector<PathStats> paths_;

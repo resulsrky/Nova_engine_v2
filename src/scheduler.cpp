@@ -43,6 +43,15 @@ PathStats WeightedScheduler::select_path() {
     return paths_.back(); // güvenlik için
 }
 
+void WeightedScheduler::update_metrics(const std::vector<PathStats>& paths) {
+    paths_ = paths;
+    for (auto& p : paths_) {
+        double score = 1000.0 / (p.rtt_ms + 1.0) * (1.0 - p.loss_ratio);
+        p.weight = std::max(1, static_cast<int>(score));
+    }
+    build_weight_table();
+}
+
 // ---------------------- Global interface ----------------------
 
 static WeightedScheduler* g_scheduler = nullptr;

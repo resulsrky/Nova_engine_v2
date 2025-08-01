@@ -1,10 +1,19 @@
 #include "erasure_coder.hpp"
-#include <algorithm>
 #include <stdexcept>
-#include <cstdint>
+#include <jerasure.h>
+#include <reed_sol.h>
+#include <cstring>
+#include <vector>
 
 ErasureCoder::ErasureCoder(int k, int r, int w)
-    : k_(k), r_(r), w_(w), bitmatrix_(nullptr) {}
+    : k_(k), r_(r), w_(w) {
+    matrix_ = reed_sol_vandermonde_coding_matrix(k_, r_, w_);
+    if (!matrix_) throw std::runtime_error("Failed to create coding matrix");
+}
+
+ErasureCoder::~ErasureCoder() {
+    if (matrix_) free(matrix_);
+}
 
 void ErasureCoder::encode(const std::vector<std::vector<uint8_t>>& k_chunks,
                           std::vector<std::vector<uint8_t>>& out_blocks) {
@@ -12,29 +21,47 @@ void ErasureCoder::encode(const std::vector<std::vector<uint8_t>>& k_chunks,
         throw std::runtime_error("Invalid number of data chunks");
 
     size_t block_size = k_chunks[0].size();
-    out_blocks = k_chunks; // k tane doğrudan veri bloğu
+    out_blocks.assign(k_chunks.begin(), k_chunks.end());
+    out_blocks.resize(k_ + r_, std::vector<uint8_t>(block_size, 0));
 
-    // Dummy parity: k_chunks[0] xor k_chunks[1] xor ... → parity[i]
-    for (int p = 0; p < r_; ++p) {
-        std::vector<uint8_t> parity(block_size, 0);
-        for (int i = 0; i < k_; ++i) {
-            for (size_t j = 0; j < block_size; ++j) {
-                parity[j] ^= k_chunks[i][j]; // dummy parity
-            }
-        }
-        out_blocks.push_back(parity);
-    }
+    std::vector<uint8_t*> data_ptrs(k_);
+    std::vector<uint8_t*> code_ptrs(r_);
+    for (int i = 0; i < k_; ++i) data_ptrs[i] = const_cast<uint8_t*>(k_chunks[i].data());
+    for (int i = 0; i < r_; ++i) code_ptrs[i] = out_blocks[k_ + i].data();
+
+    jerasure_matrix_encode(k_, r_, w_, matrix_,
+                           reinterpret_cast<char**>(data_ptrs.data()),
+                           reinterpret_cast<char**>(code_ptrs.data()),
+                           block_size);
 }
 
-bool ErasureCoder::decode(const std::vector<std::vector<uint8_t>>& recv_chunks,
+bool ErasureCoder::decode(const std::vector<std::vector<uint8_t>>& blocks,
+                          const std::vector<bool>& received,
                           std::vector<uint8_t>& recovered_data) {
-    if (recv_chunks.size() < static_cast<size_t>(k_)) return false;
+    if (blocks.size() != static_cast<size_t>(k_ + r_)) return false;
+    if (received.size() != blocks.size()) return false;
 
-    // Dummy: sadece ilk k taneyi al, birleştir
+    size_t block_size = blocks[0].size();
+    std::vector<uint8_t*> data_ptrs(k_);
+    std::vector<uint8_t*> code_ptrs(r_);
+    for (int i = 0; i < k_; ++i) data_ptrs[i] = const_cast<uint8_t*>(blocks[i].data());
+    for (int i = 0; i < r_; ++i) code_ptrs[i] = const_cast<uint8_t*>(blocks[k_ + i].data());
+
+    std::vector<int> erasures;
+    for (int i = 0; i < k_ + r_; ++i) {
+        if (!received[i]) erasures.push_back(i);
+    }
+    erasures.push_back(-1); // terminator
+
+    int ret = jerasure_matrix_decode(k_, r_, w_, matrix_, 0, erasures.data(),
+                                     reinterpret_cast<char**>(data_ptrs.data()),
+                                     reinterpret_cast<char**>(code_ptrs.data()),
+                                     block_size);
+    if (ret < 0) return false;
+
     recovered_data.clear();
     for (int i = 0; i < k_; ++i)
-        recovered_data.insert(recovered_data.end(),
-                              recv_chunks[i].begin(), recv_chunks[i].end());
+        recovered_data.insert(recovered_data.end(), blocks[i].begin(), blocks[i].end());
     return true;
 }
 

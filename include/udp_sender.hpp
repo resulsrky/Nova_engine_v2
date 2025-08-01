@@ -4,12 +4,13 @@
 #include <vector>
 #include <string>
 
-// UDP soketlerini açar (bind gerekmez, client için)
-bool init_udp_sockets(size_t count);
+// UDP soketlerini açar ve belirtilen yerel portlara bind eder
+bool init_udp_sockets(const std::vector<int>& local_ports);
 
 // Soketleri kapatır
 void close_udp_sockets();
 
 // Bir ChunkPacket'i hedef IP ve port'a gönder
-void send_udp(const std::string& target_ip, int port, const ChunkPacket& packet);
+// Non-blocking send; dönen byte sayısı <0 ise hata
+ssize_t send_udp(const std::string& target_ip, int port, const ChunkPacket& packet);
 

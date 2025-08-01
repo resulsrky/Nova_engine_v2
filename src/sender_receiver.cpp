@@ -32,7 +32,7 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
         exit(1);
     }
 
-    if (!init_udp_sockets(target_ports.size())) {
+    if (!init_udp_sockets(target_ports)) {
         cerr << "[ERROR] UDP sockets could not be initialized." << endl;
         exit(1);
     }
@@ -56,6 +56,9 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
     double stats[FIELD_COUNT] = {0};
     int frame_count = 0;
     auto stats_start = Clock::now();
+
+    size_t bytes_sent = 0;
+    auto throughput_start = Clock::now();
 
     while (true) {
         auto t0 = Clock::now();
@@ -95,8 +98,23 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
                 pkt.payload = all_blocks[i];
 
                 for (int p = 0; p < target_ports.size(); ++p) {
-                    send_udp(target_ip, target_ports[p], pkt);
+                    ssize_t sent = send_udp(target_ip, target_ports[p], pkt);
+                    if (sent > 0) bytes_sent += sent;
                 }
+            }
+
+            auto now_tp = Clock::now();
+            if (chrono::duration_cast<chrono::seconds>(now_tp - throughput_start).count() >= 1) {
+                double kbps = (bytes_sent * 8) / 1000.0;
+                int desired;
+                if (kbps > 4000) desired = 3000000;
+                else if (kbps >= 2000) desired = 1800000;
+                else desired = 1000000;
+                if (desired != encoder.getBitrate()) {
+                    encoder.setBitrate(desired);
+                }
+                bytes_sent = 0;
+                throughput_start = now_tp;
             }
 
             auto ts1 = Clock::now();
