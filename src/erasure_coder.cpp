@@ -1,6 +1,7 @@
 #include "erasure_coder.hpp"
 #include <algorithm>
 #include <stdexcept>
+#include <cstdint>
 
 ErasureCoder::ErasureCoder(int k, int r, int w)
     : k_(k), r_(r), w_(w), bitmatrix_(nullptr) {}
