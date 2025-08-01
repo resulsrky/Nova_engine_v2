@@ -6,6 +6,8 @@
 #include "packet_parser.hpp"
 #include "smart_collector.hpp"
 #include "decode_and_display.hpp"
+#include "rtt_monitor.hpp"
+#include "loss_tracker.hpp"
 
 #include <opencv2/videoio.hpp>
 #include <opencv2/core.hpp>
@@ -16,6 +18,8 @@
 #include <thread>
 #include <vector>
 #include <chrono>
+#include <deque>
+#include <algorithm>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
@@ -25,6 +29,100 @@ using namespace cv;
 typedef chrono::steady_clock Clock;
 
 enum StatField { CAPTURE, ENCODE, SEND, DISPLAY, FIELD_COUNT };
+
+// Enhanced bitrate adaptation with network monitoring
+class AdaptiveBitrateController {
+private:
+    static constexpr int WINDOW_SIZE = 10; // 10-second window
+    static constexpr double TARGET_LATENCY_MS = 100.0;
+    static constexpr double MAX_PACKET_LOSS_RATE = 0.05; // 5%
+    
+    deque<pair<Clock::time_point, double>> throughput_history;
+    deque<pair<Clock::time_point, double>> rtt_history;
+    deque<pair<Clock::time_point, double>> loss_history;
+    
+    int current_bitrate;
+    int target_fps;
+    
+public:
+    AdaptiveBitrateController(int initial_bitrate, int fps) 
+        : current_bitrate(initial_bitrate), target_fps(fps) {}
+    
+    void updateMetrics(double throughput_kbps, double rtt_ms, double loss_rate) {
+        auto now = Clock::now();
+        
+        // Update throughput history
+        throughput_history.push_back({now, throughput_kbps});
+        if (throughput_history.size() > WINDOW_SIZE) {
+            throughput_history.pop_front();
+        }
+        
+        // Update RTT history
+        rtt_history.push_back({now, rtt_ms});
+        if (rtt_history.size() > WINDOW_SIZE) {
+            rtt_history.pop_front();
+        }
+        
+        // Update loss history
+        loss_history.push_back({now, loss_rate});
+        if (loss_history.size() > WINDOW_SIZE) {
+            loss_history.pop_front();
+        }
+    }
+    
+    int getOptimalBitrate() {
+        if (throughput_history.size() < 3) return current_bitrate;
+        
+        // Calculate moving averages
+        double avg_throughput = 0, avg_rtt = 0, avg_loss = 0;
+        for (const auto& [_, val] : throughput_history) avg_throughput += val;
+        for (const auto& [_, val] : rtt_history) avg_rtt += val;
+        for (const auto& [_, val] : loss_history) avg_loss += val;
+        
+        avg_throughput /= throughput_history.size();
+        avg_rtt /= rtt_history.size();
+        avg_loss /= loss_history.size();
+        
+        // Determine optimal bitrate based on network conditions
+        int optimal_bitrate = current_bitrate;
+        
+        // If network is congested (high RTT or loss), reduce bitrate
+        if (avg_rtt > TARGET_LATENCY_MS * 1.5 || avg_loss > MAX_PACKET_LOSS_RATE) {
+            if (current_bitrate > 1000000) optimal_bitrate = 1000000;      // 1 Mbps
+            else if (current_bitrate > 800000) optimal_bitrate = 800000;   // 800 kbps
+            else optimal_bitrate = 600000;                                 // 600 kbps
+        }
+        // If network is good and we have headroom, increase bitrate
+        else if (avg_rtt < TARGET_LATENCY_MS * 0.8 && avg_loss < MAX_PACKET_LOSS_RATE * 0.5) {
+            if (avg_throughput > current_bitrate * 1.5) {
+                if (current_bitrate < 1000000) optimal_bitrate = 1000000;      // 1 Mbps
+                else if (current_bitrate < 1800000) optimal_bitrate = 1800000; // 1.8 Mbps
+                else if (current_bitrate < 3000000) optimal_bitrate = 3000000; // 3 Mbps
+            }
+        }
+        
+        // Ensure we don't exceed available throughput
+        optimal_bitrate = min(optimal_bitrate, static_cast<int>(avg_throughput * 0.8));
+        
+        // Bitrate tiers: 600k, 1M, 1.8M, 3M
+        if (optimal_bitrate <= 800000) optimal_bitrate = 600000;
+        else if (optimal_bitrate <= 1400000) optimal_bitrate = 1000000;
+        else if (optimal_bitrate <= 2400000) optimal_bitrate = 1800000;
+        else optimal_bitrate = 3000000;
+        
+        return optimal_bitrate;
+    }
+    
+    int getOptimalFPS() {
+        // Adjust FPS based on bitrate to maintain quality
+        if (current_bitrate <= 1000000) return 20;
+        else if (current_bitrate <= 1800000) return 25;
+        else return 30;
+    }
+    
+    void setCurrentBitrate(int bitrate) { current_bitrate = bitrate; }
+    int getCurrentBitrate() const { return current_bitrate; }
+};
 
 void run_sender(const string& target_ip, const vector<int>& target_ports) {
     if (target_ports.empty()) {
@@ -36,6 +134,9 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
         cerr << "[ERROR] UDP sockets could not be initialized." << endl;
         exit(1);
     }
+
+    // Initialize target addresses for zero-copy optimization
+    set_target_addresses(target_ip, target_ports);
 
     int width = 640, height = 480, fps = 30, bitrate = 600000;
     VideoCapture cap(0, cv::CAP_V4L2);
@@ -52,13 +153,23 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
     Mat frame;
     ErasureCoder fec(8, 4); // k = 8, r = 4
 
+    // Enhanced network monitoring
+    RTTMonitor rtt_monitor;
+    LossTracker loss_tracker;
+    AdaptiveBitrateController bitrate_controller(bitrate, fps);
+
     chrono::milliseconds frame_duration(1000 / fps);
     double stats[FIELD_COUNT] = {0};
     int frame_count = 0;
     auto stats_start = Clock::now();
 
+    // Enhanced throughput measurement
     size_t bytes_sent = 0;
+    size_t packets_sent = 0;
     auto throughput_start = Clock::now();
+    
+    // Network metrics collection
+    auto metrics_start = Clock::now();
 
     while (true) {
         auto t0 = Clock::now();
@@ -90,30 +201,62 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
             vector<vector<uint8_t>> all_blocks;
             fec.encode(k_blocks, all_blocks);
 
+            // Enhanced multipath sending with weighted scheduling
             for (int i = 0; i < all_blocks.size(); ++i) {
                 ChunkPacket pkt;
                 pkt.frame_id = frame_id;
                 pkt.chunk_id = i;
                 pkt.total_chunks = all_blocks.size();
                 pkt.payload = all_blocks[i];
+                pkt.timestamp = chrono::duration_cast<chrono::microseconds>(
+                    Clock::now().time_since_epoch()).count();
 
-                for (int p = 0; p < target_ports.size(); ++p) {
-                    ssize_t sent = send_udp(target_ip, target_ports[p], pkt);
-                    if (sent > 0) bytes_sent += sent;
+                // Track packet sending for loss calculation
+                for (int p : target_ports) {
+                    loss_tracker.packetSent(p);
+                }
+
+                // Use enhanced multipath sending
+                ssize_t sent = send_udp_multipath(target_ip, target_ports, pkt);
+                if (sent > 0) {
+                    bytes_sent += sent;
+                    packets_sent++;
+                    
+                    // Track RTT for this path (using first port as representative)
+                    rtt_monitor.startPing(target_ports[0], pkt.timestamp);
                 }
             }
 
+            // Enhanced bitrate adaptation every second
             auto now_tp = Clock::now();
             if (chrono::duration_cast<chrono::seconds>(now_tp - throughput_start).count() >= 1) {
-                double kbps = (bytes_sent * 8) / 1000.0;
-                int desired;
-                if (kbps > 4000) desired = 3000000;
-                else if (kbps >= 2000) desired = 1800000;
-                else desired = 1000000;
-                if (desired != encoder.getBitrate()) {
-                    encoder.setBitrate(desired);
+                double throughput_kbps = (bytes_sent * 8) / 1000.0;
+                double avg_rtt = rtt_monitor.getAverageRTT();
+                double loss_rate = loss_tracker.getLossRate();
+                
+                // Update bitrate controller
+                bitrate_controller.updateMetrics(throughput_kbps, avg_rtt, loss_rate);
+                int optimal_bitrate = bitrate_controller.getOptimalBitrate();
+                int optimal_fps = bitrate_controller.getOptimalFPS();
+                
+                // Apply bitrate change if needed
+                if (optimal_bitrate != encoder.getBitrate()) {
+                    cout << "[ADAPTIVE] Bitrate: " << encoder.getBitrate()/1000 
+                         << "k -> " << optimal_bitrate/1000 << "k, RTT: " 
+                         << avg_rtt << "ms, Loss: " << (loss_rate*100) << "%" << endl;
+                    encoder.setBitrate(optimal_bitrate);
+                    bitrate_controller.setCurrentBitrate(optimal_bitrate);
                 }
+                
+                // Apply FPS change if needed
+                if (optimal_fps != fps) {
+                    cout << "[ADAPTIVE] FPS: " << fps << " -> " << optimal_fps << endl;
+                    fps = optimal_fps;
+                    frame_duration = chrono::milliseconds(1000 / fps);
+                }
+                
                 bytes_sent = 0;
+                packets_sent = 0;
                 throughput_start = now_tp;
             }
 
@@ -134,7 +277,9 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
             cout << "Avg times (ms): Capture=" << stats[CAPTURE]/frame_count
                  << ", Encode=" << stats[ENCODE]/frame_count
                  << ", Send=" << stats[SEND]/frame_count
-                 << ", Display=" << stats[DISPLAY]/frame_count << endl;
+                 << ", Display=" << stats[DISPLAY]/frame_count 
+                 << ", RTT=" << rtt_monitor.getAverageRTT() << "ms"
+                 << ", Loss=" << (loss_tracker.getLossRate()*100) << "%" << endl;
             memset(stats, 0, sizeof(stats));
             frame_count = 0;
             stats_start = now;

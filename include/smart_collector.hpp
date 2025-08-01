@@ -25,6 +25,7 @@ private:
         uint8_t total_chunks = 0;
         size_t received_chunks = 0;
         std::chrono::steady_clock::time_point last_update;
+        std::chrono::steady_clock::time_point arrival_time;
     };
 
     std::unordered_map<uint16_t, PartialFrame> frame_buffer;
@@ -32,7 +33,7 @@ private:
 
     std::thread flush_thread;
     bool stop_flag = false;
-    int timeout_ms_ = 15;
+    int timeout_ms_ = 50;
 
     ErasureCoder fec;
     int k_; // data chunks

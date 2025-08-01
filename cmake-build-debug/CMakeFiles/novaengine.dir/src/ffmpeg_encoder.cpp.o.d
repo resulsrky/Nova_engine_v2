@@ -300,4 +300,6 @@ CMakeFiles/novaengine.dir/src/ffmpeg_encoder.cpp.o: \
  /usr/include/c++/11/bits/unique_lock.h \
  /usr/include/opencv4/opencv2/core/optim.hpp \
  /usr/include/opencv4/opencv2/core/ovx.hpp \
- /usr/include/opencv4/opencv2/core/cvdef.h /usr/include/c++/11/iostream
+ /usr/include/opencv4/opencv2/core/cvdef.h /usr/include/c++/11/iostream \
+ /usr/include/c++/11/thread /usr/include/c++/11/bits/std_thread.h \
+ /usr/include/c++/11/bits/this_thread_sleep.h

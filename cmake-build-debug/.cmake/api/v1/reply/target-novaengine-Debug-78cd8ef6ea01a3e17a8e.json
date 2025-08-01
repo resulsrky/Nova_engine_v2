@@ -26,25 +26,25 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 15,
+				"line" : 16,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 26,
+				"line" : 27,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 34,
+				"line" : 37,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 41,
+				"line" : 44,
 				"parent" : 0
 			},
 			{
@@ -56,7 +56,13 @@
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 25,
+				"line" : 9,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 26,
 				"parent" : 0
 			}
 		]
@@ -78,6 +84,10 @@
 				},
 				{
 					"backtrace" : 6,
+					"path" : "/usr/include/jerasure"
+				},
+				{
+					"backtrace" : 7,
 					"isSystem" : true,
 					"path" : "/usr/include/opencv4"
 				}
@@ -123,6 +133,10 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/usr/local/lib",
+				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
@@ -312,6 +326,16 @@
 			{
 				"backtrace" : 3,
 				"fragment" : "/usr/lib/x86_64-linux-gnu/libswscale.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/local/lib/libJerasure.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libgf_complete.so",
 				"role" : "libraries"
 			},
 			{

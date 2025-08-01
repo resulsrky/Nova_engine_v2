@@ -34,4 +34,7 @@ private:
 
     void initEncoder();
     void cleanup();
+    
+    // Calculate scene complexity for dynamic compression
+    double calculateSceneComplexity(const cv::Mat& bgrFrame);
 };

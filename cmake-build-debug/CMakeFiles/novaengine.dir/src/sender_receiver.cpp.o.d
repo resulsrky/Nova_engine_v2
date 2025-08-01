@@ -312,6 +312,8 @@ CMakeFiles/novaengine.dir/src/sender_receiver.cpp.o: \
  /home/ryuzaki/Desktop/NovaEngine/include/udp_sender.hpp \
  /home/ryuzaki/Desktop/NovaEngine/include/packet_parser.hpp \
  /home/ryuzaki/Desktop/NovaEngine/include/smart_collector.hpp \
+ /usr/include/c++/11/thread /usr/include/c++/11/bits/std_thread.h \
+ /usr/include/c++/11/bits/this_thread_sleep.h \
  /home/ryuzaki/Desktop/NovaEngine/include/decode_and_display.hpp \
  /usr/include/opencv4/opencv2/opencv.hpp \
  /usr/include/opencv4/opencv2/calib3d.hpp \
@@ -413,8 +415,6 @@ CMakeFiles/novaengine.dir/src/sender_receiver.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h \
  /usr/include/linux/falloc.h /usr/include/x86_64-linux-gnu/bits/stat.h \
  /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
- /usr/include/c++/11/thread /usr/include/c++/11/bits/std_thread.h \
- /usr/include/c++/11/bits/this_thread_sleep.h \
  /usr/include/x86_64-linux-gnu/sys/socket.h \
  /usr/include/x86_64-linux-gnu/bits/socket.h \
  /usr/include/x86_64-linux-gnu/bits/socket_type.h \

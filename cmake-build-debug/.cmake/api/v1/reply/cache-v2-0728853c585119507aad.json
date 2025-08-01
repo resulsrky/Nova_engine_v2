@@ -1198,6 +1198,30 @@
 			"value" : "[/usr][v4.5.4()]"
 		},
 		{
+			"name" : "GFCOMPLETE_LIB",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "/usr/lib/x86_64-linux-gnu/libgf_complete.so"
+		},
+		{
+			"name" : "JERASURE_LIB",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "/usr/local/lib/libJerasure.so"
+		},
+		{
 			"name" : "NovaEngine_BINARY_DIR",
 			"properties" : 
 			[
