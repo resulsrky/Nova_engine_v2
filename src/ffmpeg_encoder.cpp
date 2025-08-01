@@ -1,6 +1,7 @@
 #include "ffmpeg_encoder.h"
 #include <stdexcept>
 #include <iostream>
+#include <thread>
 
 FFmpegEncoder::FFmpegEncoder(int width, int height, int fps, int bitrate)
     : m_width(width), m_height(height), m_fps(fps), m_bitrate(bitrate)
@@ -25,6 +26,8 @@ void FFmpegEncoder::initEncoder() {
     codecContext->gop_size = 10;
     codecContext->max_b_frames = 1;
     codecContext->pix_fmt = AV_PIX_FMT_YUV420P;
+    codecContext->thread_count = std::thread::hardware_concurrency();
+    av_opt_set(codecContext->priv_data, "threads", "auto", 0);
 
     av_opt_set(codecContext->priv_data, "preset", "superfast", 0);
     av_opt_set(codecContext->priv_data, "tune", "film", 0);
@@ -75,6 +78,18 @@ bool FFmpegEncoder::encodeFrame(const cv::Mat& bgrFrame, std::vector<uint8_t>& o
     }
 
     return false;
+}
+
+void FFmpegEncoder::setBitrate(int bitrate) {
+    if (!codecContext) return;
+    if (bitrate == m_bitrate) return;
+
+    m_bitrate = bitrate;
+    codecContext->bit_rate = m_bitrate;
+    avcodec_close(codecContext);
+    if (avcodec_open2(codecContext, codec, nullptr) < 0) {
+        throw std::runtime_error("Failed to reopen codec with new bitrate");
+    }
 }
 
 void FFmpegEncoder::cleanup() {

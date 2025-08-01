@@ -18,6 +18,10 @@ public:
     // BGR Mat -> H264 encode edilmiş veri
     bool encodeFrame(const cv::Mat& bgrFrame, std::vector<uint8_t>& outEncodedData);
 
+    // Dinamik bitrate ayarı (kbps)
+    void setBitrate(int bitrate);
+    int getBitrate() const { return m_bitrate; }
+
 private:
     int m_width, m_height, m_fps, m_bitrate;
     int frameCounter = 0;

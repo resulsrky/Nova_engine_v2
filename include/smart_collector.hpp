@@ -6,6 +6,7 @@
 #include <vector>
 #include <functional>
 #include <chrono>
+#include <thread>
 #include <cstddef>
 
 class SmartFrameCollector {
@@ -13,7 +14,8 @@ public:
     using FrameReadyCallback = std::function<void(const std::vector<uint8_t>&)>;
 
     SmartFrameCollector(FrameReadyCallback callback, int k, int r);
-    void handle(const ChunkPacket& pkt);
+    ~SmartFrameCollector();
+    void handle(ChunkPacket pkt);
     void flush_expired_frames();
 
 private:
@@ -27,6 +29,10 @@ private:
 
     std::unordered_map<uint16_t, PartialFrame> frame_buffer;
     FrameReadyCallback callback;
+
+    std::thread flush_thread;
+    bool stop_flag = false;
+    int timeout_ms_ = 15;
 
     ErasureCoder fec;
     int k_; // data chunks

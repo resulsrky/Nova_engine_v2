@@ -1,15 +1,29 @@
 #include "smart_collector.hpp"
 #include <chrono>
 #include <iostream>
+#include <thread>
 
 using Clock = std::chrono::steady_clock;
 using TimePoint = std::chrono::time_point<Clock>;
 constexpr int JITTER_TIMEOUT_MS = 15;
 
 SmartFrameCollector::SmartFrameCollector(FrameReadyCallback cb, int k, int r)
-    : callback(std::move(cb)), fec(k, r), k_(k), r_(r) {}
+    : callback(std::move(cb)), fec(k, r), k_(k), r_(r) {
+    timeout_ms_ = JITTER_TIMEOUT_MS;
+    flush_thread = std::thread([this]() {
+        while (!stop_flag) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(timeout_ms_ / 2));
+            flush_expired_frames();
+        }
+    });
+}
 
-void SmartFrameCollector::handle(const ChunkPacket& pkt) {
+SmartFrameCollector::~SmartFrameCollector() {
+    stop_flag = true;
+    if (flush_thread.joinable()) flush_thread.join();
+}
+
+void SmartFrameCollector::handle(ChunkPacket pkt) {
     if (pkt.total_chunks == 0 || pkt.chunk_id >= pkt.total_chunks)
         return;
 
@@ -26,21 +40,15 @@ void SmartFrameCollector::handle(const ChunkPacket& pkt) {
     if (frame.received_flags[pkt.chunk_id])
         return;
 
-    frame.chunks[pkt.chunk_id] = pkt.payload;
+    frame.chunks[pkt.chunk_id] = std::move(pkt.payload);
     frame.received_flags[pkt.chunk_id] = true;
     frame.received_chunks++;
     frame.last_update = Clock::now();
 
     // Yeterli chunk geldiyse FEC ile decode et
     if (frame.received_chunks >= static_cast<size_t>(k_)) {
-        std::vector<std::vector<uint8_t>> valid_chunks;
-        for (size_t i = 0; i < frame.total_chunks; ++i) {
-            if (frame.received_flags[i])
-                valid_chunks.push_back(frame.chunks[i]);
-        }
-
         std::vector<uint8_t> recovered;
-        if (fec.decode(valid_chunks, recovered)) {
+        if (fec.decode(frame.chunks, frame.received_flags, recovered)) {
             callback(recovered);
             frame_buffer.erase(pkt.frame_id);
         }
@@ -60,15 +68,8 @@ void SmartFrameCollector::flush_expired_frames() {
 
     for (uint16_t fid : to_finalize) {
         auto& frame = frame_buffer[fid];
-
-        std::vector<std::vector<uint8_t>> valid_chunks;
-        for (size_t i = 0; i < frame.total_chunks; ++i) {
-            if (frame.received_flags[i])
-                valid_chunks.push_back(frame.chunks[i]);
-        }
-
         std::vector<uint8_t> recovered;
-        if (fec.decode(valid_chunks, recovered)) {
+        if (fec.decode(frame.chunks, frame.received_flags, recovered)) {
             callback(recovered);
         } else {
             std::cerr << "[WARN] FEC decode failed for frame_id " << fid << "\n";
