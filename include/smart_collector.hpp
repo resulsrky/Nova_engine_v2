@@ -6,6 +6,7 @@
 #include <vector>
 #include <functional>
 #include <chrono>
+#include <cstddef>
 
 class SmartFrameCollector {
 public:

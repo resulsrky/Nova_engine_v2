@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <vector>
+#include <cstddef>
 
 struct ChunkPacket {
     uint16_t frame_id;

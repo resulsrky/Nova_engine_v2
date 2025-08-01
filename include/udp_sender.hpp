@@ -3,6 +3,7 @@
 #include "packet_parser.hpp"  // ChunkPacket burada tanımlı
 #include <vector>
 #include <string>
+#include <cstddef>
 
 // UDP soketlerini açar (bind gerekmez, client için)
 bool init_udp_sockets(size_t count);
