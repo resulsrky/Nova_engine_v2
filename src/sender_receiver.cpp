@@ -79,6 +79,11 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
             for (int i = 0; i < 8 && i < chunks.size(); ++i)
                 k_blocks.push_back(chunks[i].payload);
 
+            if (k_blocks.size() < 8) {
+                size_t block_size = k_blocks.empty() ? 0 : k_blocks[0].size();
+                k_blocks.resize(8, vector<uint8_t>(block_size, 0));
+            }
+
             vector<vector<uint8_t>> all_blocks;
             fec.encode(k_blocks, all_blocks);
 
