@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/raulcto/CLionProjects/NovaEngine/include -I/usr/include/jerasure -isystem /usr/include/opencv4
 
-CXX_FLAGS = -std=gnu++17
+CXX_FLAGS = -g -std=gnu++17
 
