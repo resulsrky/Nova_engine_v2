@@ -12,7 +12,7 @@ std::vector<Chunk> slice_frame(const std::vector<uint8_t>& frame_data,
 
     for (size_t i = 0; i < total_chunks; ++i) {
         size_t offset = i * chunk_size;
-        size_t len = std::min(chunk_size, frame_data.size() - offset);
+        size_t len = std::min(static_cast<size_t>(chunk_size), frame_data.size() - offset);
 
         Chunk c;
         c.frame_id = frame_id;
