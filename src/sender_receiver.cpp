@@ -70,7 +70,7 @@ void run_sender(const string& target_ip, const vector<int>& target_ports) {
             vector<uint8_t> encoded;
             encoder.encodeFrame(frame, encoded);
             auto te1 = Clock::now();
-            stats[ENCODE] + chrono::duration<double, milli>(te1 - te0).count();
+            stats[ENCODE] += chrono::duration<double, milli>(te1 - te0).count();
 
             auto ts0 = Clock::now();
             auto chunks = slice_frame(encoded, frame_id, 1000);
@@ -194,4 +194,3 @@ void run_receiver(const vector<int>& ports) {
     for (int sock : sockets) close(sock);
     destroyAllWindows();
 }
-=
