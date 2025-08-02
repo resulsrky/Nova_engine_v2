@@ -28,7 +28,6 @@ bool init_udp_sockets(const std::vector<int>& local_ports) {
         // Set socket options for low latency and reuse
         int optval = 1;
         setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
-        setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
         
         // Set send buffer size for better throughput
         int sendbuf = 65536;
@@ -38,7 +37,7 @@ bool init_udp_sockets(const std::vector<int>& local_ports) {
         int flags = fcntl(sock, F_GETFL, 0);
         fcntl(sock, F_SETFL, flags | O_NONBLOCK);
         
-        // Bind to specific port for both sending and receiving
+        // Bind to specific port for receiving
         sockaddr_in addr{};
         addr.sin_family = AF_INET;
         addr.sin_port = htons(port);
